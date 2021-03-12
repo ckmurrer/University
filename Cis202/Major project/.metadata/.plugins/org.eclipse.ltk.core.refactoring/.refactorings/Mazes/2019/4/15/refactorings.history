@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;vertWalls&apos; in &apos;MazeOne&apos; to &apos;leftVertWalls&apos;&#x0D;&#x0A;- Original project: &apos;Mazes&apos;&#x0D;&#x0A;- Original element: &apos;MazeOne.vertWalls&apos;&#x0D;&#x0A;- Renamed element: &apos;MazeOne.leftVertWalls&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;vertWalls&apos;" flags="589830" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;{MazeOne.java[MazeOne^vertWalls" name="leftVertWalls" references="true" setter="false" stamp="1555019278957" textual="false" version="1.0"/>
+</session>

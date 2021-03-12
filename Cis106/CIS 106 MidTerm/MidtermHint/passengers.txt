@@ -1,0 +1,15 @@
+Jane
+Doe
+10
+123.95
+true
+John
+Smith
+30
+189.89
+false
+Mickey
+Mouse
+60
+59.99
+true

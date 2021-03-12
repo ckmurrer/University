@@ -1,0 +1,50 @@
+﻿
+Name: Cody Murrer
+ 
+Person Evaluating: Devin Schmit
+
+1) Yes but lacks comments in most of the code
+2) Sort of some tabbing issues but well spaced
+3) Duplicated code for input validation
+4) Yes I can test an debug
+5) main.cpp is fine course.cpp is fine student.cpp is fine and so is studentDB.cpp
+6) Ownership did not change too much
+
+
+
+Code Testing and Evaluating
+
+Run the program. Try different inputs. Describe bug:
+bug in data validation if entering two characters like “gn” it prints as invalid but also moves to the next option.
+Memory Leaks
+if ‘n’ is input for first add course selection it prints a linked list size that needs a \n
+Add space after the print so input isnt being typed right next to it
+skips some inputs sometimes
+didnt print majors list again
+shift + enter breaks code
+if typing yn for input on y\n question code skips
+
+Did the program satisfy all the features required:
+	No not all of the features were implemented there was an attempt as deleting nodes as well as an attempt to fix memory leaks within the destructor it also doesnt allow the user to print the list at any given time.
+
+Was the program easy to use:
+	Yes the program was very straight forward.
+
+Parts I enjoyed:
+	I enjoyed the fun errors I found as well as entering of the student.
+
+Can you identify where some bugs occur.
+	Some bugs occur during data validation as well as during the inputting of the data. The logic makes sense as well as how he used the lists. There are some parts like maybe a modular data validation if only checking for the y\n inputs. 
+
+Is it clearly documented:
+	Code has some some comments but not many within functions describing logic.
+
+
+
+
+Own program changing:
+	There is no aspect of code that I would change in mine as we have gotten to similar points in the project.
+
+General comments:
+	There are no other general comments.
+	

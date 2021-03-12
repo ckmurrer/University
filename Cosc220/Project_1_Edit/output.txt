@@ -1,0 +1,83 @@
+[cmurrer@localhost Project_1]$ ./StudentDB
+would you like to create a new student y/n: y
+Student Name: Joe
+
+
+Student date Of Birth (month/day/year): 04/20/1999
+
+History
+English
+Computer-Science
+Chemistry
+Here is a list of current majors
+
+Do you wish to add a major to the list y/n: y
+
+What is the new Major: Biology
+
+Student Major: CompSci
+
+Do you wish to create another student y/n: y
+Student Name: Henry
+
+
+Student date Of Birth (month/day/year): 03/20/1998
+
+History
+English
+Computer-Science
+Chemistry
+Biology
+Here is a list of current majors
+
+Do you wish to add a major to the list y/n: n
+
+Student Major: History
+
+
+Do you wish to create another student y/n: n
+Would you like to enter courses for a student y/n: y
+
+Enter the Students name: Henry
+
+Enter a course: US-History
+
+What department is the course from: History
+
+What semester was it taken in: Winter
+
+What was the final letter grade: A
+
+Do you wish to enter another course y/ny
+
+Enter a course: Eng-101
+
+What department is the course from: English
+
+What semester was it taken in: Winter A
+
+What was the final letter grade: 
+Do you wish to enter another course y/nn
+************************
+Name: Joe
+DOB: 04/20/1999
+Major: 
+************************
+************************
+Name: Henry
+DOB: 03/20/1998
+Major: History
+
+Course Name: US-History
+Department: History
+Semester: Winter
+Grade: A
+************************
+
+Course Name: Eng-101
+Department: English
+Semester: Winter
+Grade: A
+************************
+************************
+

@@ -1,0 +1,12 @@
+//http://tutorials.jenkov.com/java-collections/queue.html
+//https://www.geeksforgeeks.org/queue-set-1introduction-and-array-implementation/
+//http://java-buddy.blogspot.com/2013/11/example-of-linkedlist-vs-priorityqueue.html
+
+
+import java.util.Queue;
+
+import javafx.scene.shape.Rectangle;
+
+public class RectQueue {
+
+}

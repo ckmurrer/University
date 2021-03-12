@@ -1,0 +1,9 @@
+Fill 1.0 0.0 0.0 1.0
+Stroke 0.0 1.0 0.0 1.0
+Rectangle 100 100 200 300
+Fill 0.0 0.0 1.0 0.5
+Circle 320 240 100
+Text 6 6 
+please work
+//Throw
+

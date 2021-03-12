@@ -1,0 +1,40 @@
+784672517553
+Smucker's, Strawberry Jam, 32 oz
+3.59
+false
+25
+12/31/2019
+false
+784672517553.jpg
+036192127003
+Santa Cruz Organic, Dark Roasted Peanut Butter, Creamy, Organic, 16 oz
+6.19
+false
+15
+07/15/2017
+false
+036192127003.jpg
+94011
+Organic Banana
+0.89
+false
+172
+12/22/2016
+false
+banana.jpg
+043306501697
+Nature's Own, Honey Wheat Bread. 20 oz
+2.78
+false
+25
+12/31/2016
+false
+bread.jpg
+075856011470
+Klondike, Original Ice Cream Bar, 5.5 Oz. (24 Count)
+6.99
+true
+12
+09/18/2017
+true
+klondike.jpg

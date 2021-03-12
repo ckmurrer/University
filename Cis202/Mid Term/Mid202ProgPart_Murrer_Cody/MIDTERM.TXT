@@ -1,0 +1,17 @@
+Fill 1.0 0.0 0.0 1.0
+Stroke 0.0 1.0 0.0 1.0
+Rectangle 100 100 200 300 3
+Fill 0.0 0.0 1.0 0.5
+Circle 360 140 100 2
+Fill 0.0 0.4 0.8 0.7
+Arc 230 120 60 80 45 135 1
+Fill 0.8 1.0 0.8 0.7
+Ellipse 90 200 70 130 0
+Fill 1.0 0.7 0.7 0.4
+PolygonP 10 10 130 150 120 200 300 10 5
+Fill 0.0 0.0 0.0 1.0
+Stroke 0.0 0.0 0.0 1.0
+Text 110 115 4
+Welcome to the Miderm Exam!
+//Sort
+

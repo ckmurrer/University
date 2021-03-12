@@ -1,0 +1,80 @@
+1
+Baked Chicken Parmesan
+14.99
+true
+20
+12/05/2016
+false
+BakedChickenParmesan.jpg
+2
+Baked Honey Garlic Chicken
+13.99
+true
+23
+12/05/2016
+true
+BakedHoneyGarlicChicken.jpg
+3
+Maryland Crabcake
+23.99
+true
+19
+12/04/2016
+true
+crabcake.jpg
+4
+Eggplant Parmesan
+12.99
+true
+23
+12/05/2016
+true
+EggplantParmesan.jpg
+5
+Filet Mignon
+19.99
+true
+23
+12/05/2016
+true
+filetMignon.jpg
+6
+Dill Grilled Salmon
+14.49
+true
+23
+12/05/2016
+true
+grilledSalmon.jpg
+7
+PorterhouseSteak
+21.99
+true
+23
+12/05/2016
+true
+PorterhouseSteak.jpg
+8
+Saffron Risotto
+17.99
+true
+23
+12/05/2016
+true
+SaffronRisotto.jpg
+9
+BakedPotato
+1.99
+true
+23
+12/05/2016
+true
+BakedPotato.jpg
+10
+Garden Salad
+3.99
+false
+23
+12/05/2016
+true
+GardenSalad.jpg

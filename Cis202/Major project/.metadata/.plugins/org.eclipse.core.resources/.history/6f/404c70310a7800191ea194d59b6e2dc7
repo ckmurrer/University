@@ -1,0 +1,70 @@
+//http://tutorials.jenkov.com/java-collections/queue.html
+//https://www.geeksforgeeks.org/queue-set-1introduction-and-array-implementation/
+//http://java-buddy.blogspot.com/2013/11/example-of-linkedlist-vs-priorityqueue.html
+
+
+import java.util.Queue;
+
+import javafx.scene.shape.Rectangle;
+
+public class RectQueue {
+	
+	int first,last,size;
+	int capacity;
+	Rectangle rect[];
+	Rectangle item;
+	
+	public RectQueue() {
+		this.capacity = capacity;
+		first = this.size = 0;
+		last = capacity - 1;
+		rect = new Rectangle[this.capacity];
+	}
+	
+	boolean isFull(RectQueue queue) {  
+		return (queue.size == queue.capacity); 
+    } 
+	boolean isEmpty(RectQueue rectQueue) 
+    {  return (rectQueue.size == 0); } 
+       
+    // Method to add an item to the queue.  
+    // It changes rear and size 
+    void enqueue( Rectangle item) 
+    { 
+        if (isFull(this)) 
+            return; 
+        this.last = (this.last + 1)%this.capacity; 
+        this.rect[this.last] = item; 
+        this.size = this.size + 1; 
+        System.out.println(item+ " enqueued to queue"); 
+    } 
+       
+    // Method to remove an item from queue.   
+    // It changes front and size 
+    Rectangle dequeue(){ 
+        if (isEmpty(this)) 
+  
+        item = this.rect[this.first]; 
+        this.first = (this.first + 1)%this.capacity; 
+        this.size = this.size - 1; 
+        return item; 
+    } 
+       
+    // Method to get front of queue 
+    Rectangle front() 
+    { 
+        if (isEmpty(this)) 
+           
+        return this.rect[this.first];
+		return item; 
+    } 
+        
+    // Method to get rear of queue 
+    Rectangle rear() 
+    { 
+        if (isEmpty(this)) 
+           
+        return this.rect[this.last];
+		return item; 
+    } 
+}

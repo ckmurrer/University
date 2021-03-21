@@ -2,5 +2,10 @@
 ###################
 *.class
 *.o
+*.obj
+
+# Executable #
+##############
+*.out
 
 .vscode

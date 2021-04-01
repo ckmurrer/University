@@ -47,13 +47,7 @@ int main(int argc, char* argv[]){
         puts(message);
         sleep(temp);
     }
-/*
-    When this program is ran it forks the processes into a parent and child
-    where it is then ran the amount of times the user had told it to from 
-    the command line arguments when running the program. When the fork is
-    created due to the wait set on the parent process it waits for the 
-    child to finish running before finishing its process.
-*/
+
     if (pid != 0) {
         int stat_val;
         pid_t child_pid;

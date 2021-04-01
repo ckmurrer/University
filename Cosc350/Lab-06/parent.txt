@@ -1,1 +1,98 @@
-azmqrmt?!z*&gqmztv
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+
+#define BUFFER_SIZE 
+
+int check_if_number(char input){
+    int number = (int) input;
+    if(input >= (int)'' && input <= (int)''){
+        return number;
+    }
+    return ;
+}
+
+int main(int argc, char* argv[]){
+    if(argc != ){
+        printf("Argument Error: Too many or not enough arguments passed\n");
+        exit();
+    }
+
+    int infile = open(argv[],O_RDONLY);
+    if(infile <){
+        printf("File Error: Unable to open file\n");
+        exit();
+    }
+    int fileSize = lseek(infile,,SEEK_END);
+    
+    int parentOut = open("parent.txt",O_WRONLY|O_CREAT,S_IRUSR|S_IWUSR|S_IROTH|S_IWOTH|S_IRGRP|S_IWGRP);
+    if(parentOut < ){
+        printf("File Error: Unable to open or create file\n");
+        close(infile);
+        exit();
+    }
+
+    int childOut = open("child.txt",O_WRONLY|O_CREAT,S_IRUSR|S_IWUSR|S_IROTH|S_IWOTH|S_IRGRP|S_IWGRP);
+    if(childOut<){
+        printf("File Error: Unable to open or create file\n");
+        close(infile);
+        close(parentOut);
+        exit();
+    }
+
+    int exit_code;
+    char buffer;
+    
+    pid_t pid;
+    pid = fork();
+    switch(pid){
+        case -:
+            perror("fork failed");
+            exit();
+        case :
+            exit_code = ;
+            printf("Child Process Running\n");
+            for(int i=; i < fileSize; i++){
+                lseek(infile,(off_t)i,SEEK_SET);
+                read(infile,&buffer,BUFFER_SIZE);
+                if(check_if_number(buffer)){
+                    printf("Child Process writing to file\n");
+                    write(childOut,&buffer,BUFFER_SIZE);
+                }
+            }
+                printf("Child done writing to file\n");
+        break;
+        default:
+            exit_code = ;
+            printf("parent Process Running\n");
+            for(int i=; i < fileSize; i++){
+                lseek(infile,(off_t)i,SEEK_SET);
+                read(infile,&buffer,BUFFER_SIZE);
+                if(check_if_number(buffer)==){
+                    printf("Parent Process writing to file\n");
+                    write(parentOut,&buffer,BUFFER_SIZE);
+                }
+            }
+            printf("Parent done writing to file\n");
+        break;
+    }
+    close(infile);
+    close(parentOut);
+    close(childOut);
+
+    if (pid != ) {
+        int stat_val;
+        pid_t child_pid;
+        child_pid = wait(&stat_val);
+        printf("Child has finished: PID = %d\n", child_pid);
+        if(WIFEXITED(stat_val))
+        printf("Child exited with code %d\n", WEXITSTATUS(stat_val));
+        else
+        printf("Child terminated abnormally\n");
+    }
+    exit(exit_code);
+}

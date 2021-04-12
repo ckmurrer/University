@@ -1,29 +1,42 @@
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 
-int char_to_int(char *input){ 
-    int number = 0; 
-    int position = 0; 
-    while(input[position] != '\0'){ 
-        number = (10 * number) + (input[position] - '0'); 
-        position++; 
-    } 
-    return number; 
-} 
-
-int main(int argc, char* argv[])
+int stringtoint(char *c)
 {
-    char *message = argv[1];
-	int Nc = char_to_int(argv[2]);
-	int Tc = char_to_int(argv[3]);
+  int i = 0;
+  long int num = 0;
+  while (c[i] != '\0')
+  {
+    num = 10 * num + (c[i] - '0');
+    i++;
+  }
+  return num;
+}
 
-	for(; Nc > 0; Nc--)
-    {
-        printf("%s PID: %d\n",message, getpid());
-        sleep(Tc);
-    }
-	exit(37);
+int main(int argc, char *argv[])
+{
+  if (argc != 3)
+  {
+    printf("ERROR: Expected 3 arguments!\n");
+    printf("Example: ./child [message] [Nc] [Tc]\n");
+    return -1;
+  }
+  pid_t pid = getpid();
+  char *message = argv[0];
+  int Nc = stringtoint(argv[1]);
+  int Tc = stringtoint(argv[2]);
+  int n = Nc;
+
+  for (; n > 0; n--)
+  {
+    printf("%s | pid: %d\n", message, pid);
+    sleep(Tc);
+  }
+
+  exit(37);
 }

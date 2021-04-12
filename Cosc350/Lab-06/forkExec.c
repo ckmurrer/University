@@ -1,62 +1,62 @@
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
 
-int char_to_int(char *input){ 
-    int number = 0; 
-    int position = 0; 
-    while(input[position] != '\0'){ 
-        number = (10 * number) + (input[position] - '0'); 
-        position++; 
-    } 
-    return number; 
-} 
+int stringtoint(char *c){
+  int i = 0;
+  long int num = 0;
+  while (c[i] != '\0')
+  {
+    num = 10 * num + (c[i] - '0');
+    i++;
+  }
+  return num;
+}
 
-int main(int argc, char* argv[]){
-    if(argc != 5){
-        printf("Argument Error: Too many or too little arguments passed\n");
-        printf("Command should be ./task2 [Nc] [Np] [Tc] [Tp]\n");
-        exit(1);
+int main(int argc, char *argv[]){
+  pid_t pid;
+  char *message;
+  int n;
+  if (argc != 5){
+    printf("ERROR: Invalid number of arguments passed, expected 4\n");
+    printf("Example: ./fork [Nc] [Np] [Tc] [Tp]\n");
+    return -1;
+  }
+
+  int Nc = stringtoint(argv[1]);
+  int Np = stringtoint(argv[2]);
+  int Tc = stringtoint(argv[3]);
+  int Tp = stringtoint(argv[4]);
+
+  printf("fork program starting\n");
+  pid = fork();
+
+  int sleepTime;
+
+  switch (pid){
+  case -1:
+    perror("fork failed");
+    exit(1);
+  case 0:
+    printf("Exec returned: %d\n", execlp("./child", "This is the child", argv[1], argv[3], (char *)0));
+    break;
+  default:
+    message = "This is the parent";
+    n = Np;
+    sleepTime = Tp;
+    break;
+  }
+
+  for (; n > 0; n--){
+    printf("%s pid: %d\n", message, pid);
+    sleep(sleepTime);
+    if (pid != 0){
+      printf("Waiting for child process to terminate.\n");
+      wait(0);
+      printf("Child process terminated.\n");
     }
-
-    pid_t pid;
-    char *message;
-    int n,temp, exit_code;
-    int Nc = char_to_int(argv[1]), Np = char_to_int(argv[2]), Tc = char_to_int(argv[3]), Tp = char_to_int(argv[4]);
-    printf("fork program starting\n");
-
-    pid = fork();
-    switch(pid){
-        case -1:
-            perror("fork failed");
-            exit(1);
-        case 0:
-			execlp("./child", "This is the child", argv[1], argv[3], (char *)0);
-        break;
-        default:
-            message = "This is the parent";
-            n = Np;
-            temp = Tp;
-            exit_code = 0;
-        break;
-    }
-
-    for(; n > 0; n--) {
-        puts(message);
-        sleep(temp);
-    }
-
-    if (pid != 0) {
-        int stat_val;
-        pid_t child_pid;
-        child_pid = wait(&stat_val);
-        printf("Child has finished: PID = %d\n", child_pid);
-        if(WIFEXITED(stat_val))
-        printf("Child exited with code %d\n", WEXITSTATUS(stat_val));
-        else
-        printf("Child terminated\n");
-    }
-    exit(exit_code);
+  }
+  return 0;
 }

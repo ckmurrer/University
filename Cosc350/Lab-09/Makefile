@@ -18,16 +18,16 @@ twoPipesChild: twoPipesChild.c
 pipeFifo: pipeFifo.c
 	gcc -Wall pipeFifo.c -o pipeFifo
 
-buildsm: buildsm.c
+buildsm: buildsm.c header.h
 	gcc -Wall buildsm.c -o buildsm
 
-removesm: removesm.c
+removesm: removesm.c header.h
 	gcc -Wall removesm.c -o removesm
 
-process1: process1.c
+process1: process1.c header.h
 	gcc -Wall process1.c -o process1
 
-process2: process2.c
+process2: process2.c header.h
 	gcc -Wall process2.c -o process2
 
 clean:

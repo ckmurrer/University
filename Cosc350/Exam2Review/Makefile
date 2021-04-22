@@ -1,4 +1,4 @@
-all: task1 task2 task3 task5 task6 twosum anyinput 
+all: task1 task2 task3 task5 task6 twosum anyinput process1 process2
 
 task1: task1.c
 	gcc task1.c -o task1
@@ -21,6 +21,11 @@ twosum: twosum.c
 anyinput: anyinput.c
 	gcc anyinput.c -o anyinput
 
+process1: process1.c
+	gcc process1.c -o process1
+
+process2: process2.c 
+	gcc process2.c -o process2
 
 clean:
-	rm task1 task2 task3 task5 task6 twosum anyinput 
+	rm task1 task2 task3 task5 task6 twosum anyinput process1 process2

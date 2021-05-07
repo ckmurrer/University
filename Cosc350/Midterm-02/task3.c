@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-void *fun1(int* value){
-    value[0] = value[0]+10;
-    pthread_exit(NULL);
+void *fun1(void *arg){
+    long num = (long)arg;
+    num = num + 10;
+    return ((void*) num);
 }
 
-void *fun2(int* value){
-    value[0]=value[0]+20;
-    pthread_exit(NULL);
+void *fun2(void *arg){
+    long num = (long)arg;
+    num = num + 20;
+    return ((void*) num);
 }
 
-void *fun3(int* value){
-    value[0]=value[0]+30;
-    pthread_exit(NULL);
+void *fun3(void *arg){
+     long num = (long)arg;
+    num = num + 30;
+    return ((void*) num);
 }
 
 int str_to_int(char *input){ 
@@ -28,39 +31,24 @@ int str_to_int(char *input){
 } 
 
 int main(int args, char *argv[]){
-    if(args != 2){
+    if(args == 1){
         printf("Invalid Input: too many or too little arguments passed\n");
         return 1;
     }
-    printf("The user input is: %s\n", argv[1]);
-    pthread_t threads[3];
-    int temp;
-    int* value  = malloc(1*sizeof(int));
-    value[0] = str_to_int(argv[1]);
+    long num = atoi(argv[1]);
+    int rc;
+    pthread_t tid1, tid2, tid3;
+    void *tret1, *tret2, *tret3;
 
-    temp = pthread_create(&threads[0],NULL,(void*)(int*)fun1,(void*)value);
-    if(temp){
-        printf("Thread Error: unable to create threads[0]\n");
-        exit(1);
-    }
-    pthread_join(threads[0],NULL);
+    rc = pthread_create(&tid1, NULL, fun1, (void*)num);
+    rc = pthread_join(tid1, &tret1);
 
-    temp = pthread_create(&threads[1],NULL,(void*)(int*)fun2,(void*)value);
-    if(temp){
-        printf("Thread Error: unable to create threads[0]\n");
-        exit(1);
-    }
-    pthread_join(threads[1],NULL);
+    rc = pthread_create(&tid2, NULL, fun2, (void*)tret1);
+    rc = pthread_join(tid2, &tret2);
 
-    temp = pthread_create(&threads[2],NULL,(void*)(int*)fun3,(void*)value);
-    if(temp){
-        printf("Thread Error: unable to create threads[0]\n");
-        exit(1);
-    }
-    pthread_join(threads[2],NULL);
+    rc = pthread_create(&tid3, NULL, fun3, (void*)tret2);
+    rc = pthread_join(tid3, &tret3);
 
-    printf("The third thread's calculation result is: %d\n",value[0]);
-    
-    free(value);
-    return 0;
+    printf("The final result of three threads calculation is %ld\n", (long) tret3);
+    exit(0);
 }

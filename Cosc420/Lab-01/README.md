@@ -1,5 +1,5 @@
-Cody Murrer
-Cosc 420 High-Performance Computing
+Cody Murrer,    
+Cosc 420 High-Performance Computing,    
 9/8/21
 
 This lab was given with the intentions to introduce us as students to the basics of OpenMP and MPI as well as parallel programming.

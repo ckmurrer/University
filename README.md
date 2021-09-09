@@ -16,4 +16,6 @@ Class List:
 6. Cosc 350 (Spring 2021) - Systems Software
 7. Cosc 370 (Spring 2021) - Computer Networks
 8. Cosc 386 (Spring 2021) - Database Design and Implementaion
-9. Cosc 425 (Spring 2021) - Software Engineering One
+9. Cosc 420 (Fall 2021) - High-Performance Computing
+10. Cosc 425 (Spring 2021) - Software Engineering One
+11. Cosc 426 (Fall 2021) - Software Engineering Two

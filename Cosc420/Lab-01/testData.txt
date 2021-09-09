@@ -1,0 +1,43 @@
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$ mpiexec -n 4 ./bigNumbers 200000
+Rank: 2 starts at: 224, and ends at: 335.
+Rank: 1 starts at: 112, and ends at: 223.
+DIVISOR FOUND... Rank: 1 found a divisor of 125.
+Rank: 3 starts at: 336, and ends at: 447.
+DIVISOR FOUND... Rank: 3 found a divisor of 400.
+Rank: 0 starts at: 2, and ends at: 111.
+DIVISOR FOUND... Rank: 0 found a divisor of 2.
+DIVISOR FOUND... Rank: 2 found a divisor of 250.
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$ mpiexec -n 4 ./bigNumbers 11
+Rank: 2 starts at: 2, and ends at: 2.
+NO DIVISOR FOUND with Rank: 2, number is prime if no others found.
+Rank: 3 starts at: 3, and ends at: 3.
+NO DIVISOR FOUND with Rank: 3, number is prime if no others found.
+Rank: 0 starts at: 2, and ends at: 0.
+Rank: 1 starts at: 1, and ends at: 1.
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$ mpiexec -n 4 ./bigNumbers 21
+Rank: 0 starts at: 2, and ends at: 1.
+Rank: 1 starts at: 2, and ends at: 2.
+NO DIVISOR FOUND with Rank: 1, number is prime if no others found.
+Rank: 2 starts at: 3, and ends at: 3.
+DIVISOR FOUND... Rank: 2 found a divisor of 3.
+Rank: 3 starts at: 4, and ends at: 4.
+NO DIVISOR FOUND with Rank: 3, number is prime if no others found.
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$ mpiexec -n 4 ./bigNumbers 5959595
+Rank: 0 starts at: 2, and ends at: 610.
+DIVISOR FOUND... Rank: 0 found a divisor of 5.
+Rank: 3 starts at: 1831, and ends at: 2441.
+NO DIVISOR FOUND with Rank: 3, number is prime if no others found.
+Rank: 2 starts at: 1221, and ends at: 1830.
+NO DIVISOR FOUND with Rank: 2, number is prime if no others found.
+Rank: 1 starts at: 611, and ends at: 1220.
+NO DIVISOR FOUND with Rank: 1, number is prime if no others found.
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$ mpiexec -n 4 ./bigNumbers 19845
+Rank: 2 starts at: 71, and ends at: 105.
+DIVISOR FOUND... Rank: 2 found a divisor of 81.
+Rank: 0 starts at: 2, and ends at: 35.
+DIVISOR FOUND... Rank: 0 found a divisor of 3.
+Rank: 3 starts at: 106, and ends at: 140.
+DIVISOR FOUND... Rank: 3 found a divisor of 135.
+Rank: 1 starts at: 36, and ends at: 70.
+DIVISOR FOUND... Rank: 1 found a divisor of 45.
+cmurrer@ubuntu:~/Documents/VS/Cosc420/Lab-01$

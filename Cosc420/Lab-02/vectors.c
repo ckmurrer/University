@@ -60,10 +60,6 @@ int main(int argc, char** argv){
     );
 
     prod = malloc(recSize*sizeof(int));
-    int i;
-    for(i=0; i<recSize; i++){
-        prod[i] = recOne[i] + recTwo[i];
-    }
 
 // clearing up memory and terminating program
     free(vecOne);

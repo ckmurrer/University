@@ -17,8 +17,8 @@ int main(int argc, char** argv){
     int* recOne = NULL;
     int* vecTwo = NULL;
     int* recTwo = NULL;
-    int* prodResult;
-    int* prod = NULL;
+    int prod = 0;
+    int prodResult = 0;
     int arrSize = 11/*rand()%1000000+1*/;
     int recSize = arrSize / wSize;
     recOne = malloc(recSize*sizeof(int));
@@ -59,14 +59,36 @@ int main(int argc, char** argv){
         world       //Comm
     );
 
-    prod = malloc(recSize*sizeof(int));
+    int k;
+    for(k = 0; k<recSize;k++){
+        printf("Rank: %d ----- %d ----- %d\n",rank,recOne[k],recTwo[k]);
+    }
 
+// takes inner product of two vectors
+    int i;
+    for(i=0; i<recSize;i++){
+        prod += recOne[i] * recTwo[i];
+    }
+        printf("Rank: %d --- prod: %d\n",rank,prod);
+    MPI_Reduce(
+        &prod,
+        &prodResult,
+        1,
+        MPI_INT,
+        MPI_SUM,
+        0,
+        world
+    );
+
+// output of inner product total
+    if(rank == 0){
+        printf("The inner product result is: %d\n",prodResult);
+    }
 // clearing up memory and terminating program
     free(vecOne);
     free(vecTwo);
     free(recOne);
     free(recTwo);
-    free(prod);
 	MPI_Finalize();
 	return 0;
 }

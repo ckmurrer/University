@@ -5,19 +5,26 @@
 
 int main(int argc, char** argv){
 	MPI_Init(&argc,&argv);
+
 // gets the world world size and the rank	
     int wSize, rank;
     MPI_Comm world = MPI_COMM_WORLD;
     MPI_Comm_rank(world, &rank);
     MPI_Comm_size(world, &wSize);
 
+// variables that are to be used 
     int* vecOne = NULL;
     int* recOne = NULL;
-    int* vecTwo;
-    int* recTwo;
+    int* vecTwo = NULL;
+    int* recTwo = NULL;
+    int* prodResult;
+    int* prod = NULL;
     int arrSize = 11/*rand()%1000000+1*/;
-    //int* prodResult;
+    int recSize = arrSize / wSize;
+    recOne = malloc(recSize*sizeof(int));
+    recTwo = malloc(recSize*sizeof(int));
 
+// root node allocated size of vectors and populates them.
     if(rank == 0){
         srand(time(0));
         vecOne = malloc(wSize*arrSize*sizeof(int));
@@ -30,52 +37,40 @@ int main(int argc, char** argv){
         }
     }
 
-    int recSize = arrSize / wSize;
-    recOne = malloc(recSize*sizeof(int));
-    recTwo = malloc(recSize*sizeof(int));
-
+// scatter both the vectors populated by root node 0
     MPI_Scatter(
-        vecOne,
-        recSize,
-        MPI_INT,
-        recOne,
-        recSize,
-        MPI_INT, 
-        0, 
-        world
+        vecOne,     //Vector one
+        recSize,    //Size of amount of data being sent
+        MPI_INT,    //Type of data being sent
+        recOne,     //Receiving vector
+        recSize,    //Size of receiving vector
+        MPI_INT,    //Type of data being received
+        0,          //Root Node
+        world       //Comm
     );
     MPI_Scatter(
-        vecTwo,
-        recSize,
-        MPI_INT,
-        recTwo,
-        recSize,
-        MPI_INT,
-        0,
-        world
+        vecTwo,     //Vector one
+        recSize,    //Size of amount of data being sent
+        MPI_INT,    //Type of data being sent
+        recTwo,     //Receiving vector
+        recSize,    //Size of receiving vector
+        MPI_INT,    //Type of data being received
+        0,          //Root Node
+        world       //Comm
     );
 
+    prod = malloc(recSize*sizeof(int));
     int i;
     for(i=0; i<recSize; i++){
-        printf("Rank: %d --- Element: %d is |%d |---| %d|.\n",rank,i,recOne[i],recTwo[i]);
+        prod[i] = recOne[i] + recTwo[i];
     }
-/*
-	int n,m;
-	int* A = malloc(n*m*sizeof(int));
-	int i,j;
-	for(i=0; i<n; i++){
-		for(j=0; j<m; j++){
-			A[INDEX(n,m,i,j)] = rand();
-		}
-	}
-	
-	free(A);
-*/
+
 // clearing up memory and terminating program
     free(vecOne);
     free(vecTwo);
     free(recOne);
     free(recTwo);
+    free(prod);
 	MPI_Finalize();
 	return 0;
 }

@@ -1,6 +1,13 @@
 #include "matrix.h"
 
-int main(int argc, char** argv){
+void initMatrix(matrix* A, int rows, int cols){
+	
+}
 
-    return 0;
+void matrixAddition(){
+
+}
+
+void matrixSubraction(){
+
 }

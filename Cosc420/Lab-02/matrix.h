@@ -10,12 +10,14 @@ typedef struct matrix{
     int* data;
 }matrix;
 
+// initMatrix
+	void initMatrix(matrix* A, int rows, int cols);
 // addition
-
+	void matrixAddition();
 // subtraction
-
+	void matrixSubtraction();
 // multiplication
-
+	void matrixMutiplication();
 // innerproduct
-
+	
 #endif

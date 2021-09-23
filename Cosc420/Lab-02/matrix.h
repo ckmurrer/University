@@ -1,8 +1,13 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#define INDEX(i,j,n,m) i*m+j
-#define ACCESS(A,i,j) A.data[INDEX(i,j,A.rows,A.cols)]
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<mpi.h>
+
+#define INDEX(A,i,j) j+A->cols*i
+#define ACCESS(A,i,j) A->data[INDEX(A,i,j)]
 
 typedef struct matrix{
     int rows;
@@ -11,13 +16,15 @@ typedef struct matrix{
 }matrix;
 
 // initMatrix
-	void initMatrix(matrix* A, int rows, int cols);
-// addition
-	void matrixAddition();
-// subtraction
-	void matrixSubtraction();
+	void initMatrix(matrix*, int, int);
 // multiplication
 	void matrixMutiplication();
+// addition
+	void matrixAddition();
 // innerproduct
-	
+    void innerProduct();
+// printMatrix
+    void printMatrix(matrix*);
+// subtraction
+	void matrixSubtraction();
 #endif

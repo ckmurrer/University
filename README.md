@@ -1,16 +1,18 @@
 # University
-This repo contains all of my code during my time studying as a Computer Science student in University.
+This repo contains all of my code during my time studying as a Computer Science student.
+Starting in community college during the Fall 2017 semester and graduating from a four year 
+university in the Fall 2021 semester.
 
-Schools attended(Class abbreviation, years spent studying there):
-
+School(s) attended(Class abbreviation, years spent studying there):
 1. Frederick Community College (Cis, 2017-2019)
 2. Salisbury University (Cosc 2019-2021)
 
 Class List:
-
+--------------------Started Frederick Community College--------------------
 1. Cis 106 (Spring 2018) - Object Design and Programming
 2. Cis 201 (Fall 2018) - Computer Science One
 3. Cis 202 (Spring 2019) - Computer Science Two
+--------------------Transferred to Salisbury University--------------------
 4. Cosc 220 (Fall 2019) - Computer Science Two 
 5. Cosc 320 (Fall 2020) - Advanced Data Structures and Algorithm Analysis
 6. Cosc 350 (Spring 2021) - Systems Software

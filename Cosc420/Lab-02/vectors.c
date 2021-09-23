@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     int* recTwo = NULL;
     int prod = 0;
     int prodResult = 0;
-    int arrSize = 11/*rand()%1000000+1*/;
+    int arrSize = rand()%1000000+1;
     int recSize = arrSize / wSize;
     recOne = malloc(recSize*sizeof(int));
     recTwo = malloc(recSize*sizeof(int));
@@ -58,18 +58,21 @@ int main(int argc, char** argv){
         0,          //Root Node
         world       //Comm
     );
+/*  prints out all of the vectors to check if the below loop was correcr
+    tested with small arrSize values 5-50
 
     int k;
     for(k = 0; k<recSize;k++){
         printf("Rank: %d ----- %d ----- %d\n",rank,recOne[k],recTwo[k]);
     }
-
+*/
 // takes inner product of two vectors
     int i;
     for(i=0; i<recSize;i++){
         prod += recOne[i] * recTwo[i];
     }
-        printf("Rank: %d --- prod: %d\n",rank,prod);
+
+// reduces the inner product calculation into prodResult using the sum
     MPI_Reduce(
         &prod,
         &prodResult,
@@ -80,10 +83,16 @@ int main(int argc, char** argv){
         world
     );
 
-// output of inner product total
+// output from rank one of
+// world size, the root vector size, the scattered 
+// vector size, and the inner product total.
     if(rank == 0){
+        printf("World size is: %d\n",wSize);
+        printf("Root vector size is: %d\n",arrSize);
+        printf("Scattered vector size is: %d\n", recSize);
         printf("The inner product result is: %d\n",prodResult);
     }
+
 // clearing up memory and terminating program
     free(vecOne);
     free(vecTwo);

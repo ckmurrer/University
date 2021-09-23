@@ -19,3 +19,6 @@ Class List:
 9. Cosc 420 (Fall 2021) - High-Performance Computing
 10. Cosc 425 (Spring 2021) - Software Engineering One
 11. Cosc 426 (Fall 2021) - Software Engineering Two
+12. Cosc 450 (Fall 2021) - Operating Systems
+13. Cosc 451 (Fall 2021) - Robotics
+14. Cosc 472 (Fall 2021) - Network Security

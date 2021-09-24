@@ -18,13 +18,15 @@ typedef struct matrix{
 // initMatrix
 	void initMatrix(matrix*, int, int);
 // multiplication
-	void matrixMutiplication();
+	matrix matrixMutiplication(matrix*,matrix*, MPI_Comm);
 // addition
-	void matrixAddition();
+	matrix matrixAddition(matrix*, matrix*, MPI_Comm);
 // innerproduct
-    void innerProduct();
+   	matrix innerProduct(matrix*, matrix*, MPI_Comm);
 // printMatrix
-    void printMatrix(matrix*);
+	void printMatrix(matrix*);
 // subtraction
-	void matrixSubtraction();
+	matrix  matrixSubtraction(matrix*, matrix*, MPI_Comm);
+// transpose
+	matrix matrixTranspose(matrix*,MPI_Comm);
 #endif

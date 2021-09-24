@@ -6,7 +6,7 @@
 #include<time.h>
 #include<mpi.h>
 
-#define INDEX(A,i,j) j+A->cols*i
+#define INDEX(A,i,j) j->A.cols*i
 #define ACCESS(A,i,j) A->data[INDEX(A,i,j)]
 
 typedef struct matrix{
@@ -17,6 +17,8 @@ typedef struct matrix{
 
 // initMatrix
 	void initMatrix(matrix*, int, int);
+// matrix random population
+	void populateMatrix(matrix*, int, int);
 // multiplication
 	matrix matrixMutiplication(matrix*,matrix*, MPI_Comm);
 // addition

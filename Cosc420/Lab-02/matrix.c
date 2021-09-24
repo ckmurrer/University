@@ -15,6 +15,11 @@ void initMatrix(matrix* A, int rows, int cols){
 */
 }
 
+void populateMatrix(matrix* A, int rows, int cols){
+
+	
+}
+
 void printMatrix(matrix* A){
     int i,j;
     for(i=0; i<A->rows;i++){

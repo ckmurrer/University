@@ -5,14 +5,14 @@ void initMatrix(matrix* A, int rows, int cols){
 	A->rows = rows;
     	A->cols = cols;
     	A->data = malloc(A->rows*A->cols*sizeof(int));
-/*
+
     int i,j;
     for(i=0; i<rows; i++){
         for (j=0; j < cols; j++){
-            ACCESS(A,i,j) = rand()%10+1;
+            ACCESS((*A),i,j) = rand()%10+1;
         }
     }
-*/
+
 }
 /*
 void populateMatrix(matrix* A, int rows, int cols){

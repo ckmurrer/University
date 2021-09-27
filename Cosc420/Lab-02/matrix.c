@@ -14,17 +14,17 @@ void initMatrix(matrix* A, int rows, int cols){
     }
 */
 }
-
+/*
 void populateMatrix(matrix* A, int rows, int cols){
 
 	
 }
-
+*/
 void printMatrix(matrix* A){
     int i,j;
     for(i=0; i<A->rows;i++){
         for(j=0; j<A->cols;j++){
-            printf("%.02d | ",ACCESS(A,i,j));
+           printf("%.02d | ",ACCESS((*A),i,j));
         }
         printf("\n");
     }
@@ -33,6 +33,7 @@ void printMatrix(matrix* A){
 matrix matrixAddition(matrix* A, matrix* B, MPI_Comm world){
 	matrix add;
 	initMatrix(&add,A->rows,A->cols);
+	
 	return add;
 }
 

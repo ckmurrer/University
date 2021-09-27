@@ -6,8 +6,8 @@
 #include<time.h>
 #include<mpi.h>
 
-#define INDEX(A,i,j) j->A.cols*i
-#define ACCESS(A,i,j) A->data[INDEX(A,i,j)]
+#define INDEX(A,i,j) j*A.cols+i
+#define ACCESS(A,i,j) A.data[INDEX(A,i,j)]
 
 typedef struct matrix{
     int rows;

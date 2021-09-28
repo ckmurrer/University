@@ -20,15 +20,15 @@ typedef struct matrix{
 // matrix random population
 	void populateMatrix(matrix*, int, int);
 // multiplication
-	matrix matrixMutiplication(matrix*,matrix*, MPI_Comm);
+	int* matrixMutiplication(matrix*,matrix*, MPI_Comm,int, int);
 // addition
-	matrix matrixAddition(matrix*, matrix*, MPI_Comm);
+	int* matrixAddition(matrix*,matrix*, MPI_Comm,int, int);
 // innerproduct
-   	matrix innerProduct(matrix*, matrix*, MPI_Comm);
+   	int innerProduct(matrix*,matrix*, MPI_Comm,int, int);
 // printMatrix
 	void printMatrix(matrix*);
 // subtraction
-	matrix  matrixSubtraction(matrix*, matrix*, MPI_Comm);
+	int*  matrixSubtraction(matrix*,matrix*, MPI_Comm,int, int);
 // transpose
-	matrix matrixTranspose(matrix*,MPI_Comm);
+	int* matrixTranspose(matrix*);
 #endif

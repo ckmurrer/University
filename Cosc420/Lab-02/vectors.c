@@ -58,7 +58,7 @@ int main(int argc, char** argv){
         0,          //Root Node
         world       //Comm
     );
-/*  prints out all of the vectors to check if the below loop was correcr
+/*  prints out all of the vectors to check if the below loop was correct
     tested with small arrSize values 5-50
 
     int k;

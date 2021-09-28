@@ -2,40 +2,38 @@
 
 int main(int argc, char** argv){
     MPI_Init(&argc,&argv);
-       
-    matrix A;
+    int wSize,rank;
+    MPI_Comm world = MPI_COMM_WORLD;
+    MPI_Comm_rank(world,&rank);
+    MPI_Comm_size(world,&wSize);
+
+    srand(time(0));
+// testing for add and subtract
+    matrix A,B,C;
     A.rows = 5;
     A.cols = 5;
-
-   initMatrix(&A,A.rows,A.cols);
-  /* int i,j; 
-    srand(time(0));
-    for(i=0;i<A.rows;i++){
-        for(j=0;j<A.cols;j++){
-	    ACCESS(A,i,j) = rand()%10+1;
-	}    
-    }
-*/
-    matrix B;
     B.rows = 5;
     B.cols = 5;
-    
+    C.rows = 5;
+    C.cols = 5;
+    initMatrix(&A,A.rows,A.cols);
     initMatrix(&B,B.rows,B.cols);
+    initMatrix(&C,C.rows,C.cols);
+    populateMatrix(&A,A.rows,A.cols);
+    populateMatrix(&B,B.rows,B.cols);
 
-/*    for(i=0; i<B.rows; i++){
-	for(j=0; j<B.cols;j++){
-	    ACCESS((*B),i,j) = rand()%10+1;
-	}
+    C.data = matrixSubtraction(&A,&B,world,wSize,rank);
+    if(rank == 0){
+        printf("--------Matrix A--------\n");
+        printMatrix(&A);
+        printf("\n--------Matrix B--------\n");
+        printMatrix(&B);
+        printf("\n--------Matrix Addition Total--------\n");
+        printMatrix(&C);
     }
-*/
-
-    printMatrix(&A);
-    printf("\n");
-    printMatrix(&B);
-    
     free(A.data); 
     free(B.data);
-
+    free(C.data);
     MPI_Finalize();
     return 0;
 }

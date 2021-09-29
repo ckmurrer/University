@@ -1,0 +1,15 @@
+                Nodes       Time        
+Addition        10         2.602s
+                10         2.600s
+                10         2.597s
+avg                        2.600s 
+
+Subtraction     10         2.608s
+                10         2.596s
+                10         2.547s
+avg                        2.584s 
+
+Multiplication  for some reason wont run on HPCL to test high node size and matrix size
+
+avg     
+

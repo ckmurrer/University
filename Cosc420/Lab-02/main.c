@@ -50,6 +50,7 @@ int main(int argc, char** argv){
         free(A.data);
         free(B.data);
         free(C.data);
+        printf("Addition Done\n");
 //        printf("------------------------------------------------\n");
     }
 //subtraction
@@ -79,6 +80,7 @@ int main(int argc, char** argv){
         free(A.data);
         free(B.data);
         free(C.data);
+        printf("Subtraction Done\n");
 //        printf("------------------------------------------------\n");
     }
 //multiplication 
@@ -108,6 +110,7 @@ int main(int argc, char** argv){
         free(A.data);
         free(B.data);
         free(C.data);
+        printf("Multiplication Done\n");
 //        printf("------------------------------------------------\n");
     }
 // inner product
@@ -134,6 +137,7 @@ int main(int argc, char** argv){
 */
         free(A.data);
         free(B.data);
+        printf("Inner Product Done\n");
 //        printf("------------------------------------------------\n");
     }
 // transpose    
@@ -155,6 +159,7 @@ int main(int argc, char** argv){
 */
         free(A.data);
         free(C.data);
+        printf("Transpose Done\n");
     }
 
     MPI_Finalize();

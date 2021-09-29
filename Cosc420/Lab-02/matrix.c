@@ -184,6 +184,9 @@ matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int ra
         printf("This aint it cheif. Invalid input\n");
         return test;
     }
+    if(wSize> A->cols*B->cols){
+        return test;
+    }
     matTrans = matrixTranspose(B); // takes the transpose of a passed matrix
     initMatrix(&vecOne,1,A->cols); // initializes a vector
     initMatrix(&vecTwo,B->rows,1); // initializes a vector

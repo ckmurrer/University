@@ -14,16 +14,22 @@ int main(int argc, char** argv){
     MPI_Comm_size(world,&wSize);
 
     srand(time(0));
+//change .row an .col size to change the size of the matrix
+    int* arr = malloc(5*sizeof(int));
+    arr[0] = 5;
+    arr[1] = 10;
+    arr[2] = 100;
+    arr[3] = 1000;
+    arr[4] = 10000;
 // testing for add and subtract
     matrix A,B,C;
-    
  // addition
-    A.rows = 5;
-    A.cols = 5;
-    B.rows = 5;
-    B.cols = 5;
-    C.rows = 5;
-    C.cols = 5;
+    A.rows = arr[4];
+    A.cols = arr[4];
+    B.rows = arr[4];
+    B.cols = arr[4];
+    C.rows = arr[4];
+    C.cols = arr[4];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);
@@ -33,25 +39,26 @@ int main(int argc, char** argv){
     C = matrixAddition(&A,&B,world,wSize,rank);
 
     if(rank == 0){
+/*     
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Matrix B--------\n");
         printMatrix(&B);
         printf("\n--------Matrix Addition Total--------\n");
         printMatrix(&C);
-
+*/
         free(A.data);
         free(B.data);
         free(C.data);
-printf("------------------------------------------------\n");
+//        printf("------------------------------------------------\n");
     }
 //subtraction
-    A.rows = 5;
-    A.cols = 5;
-    B.rows = 5;
-    B.cols = 5;
-    C.rows = 5;
-    C.cols = 5;
+    A.rows = arr[4];
+    A.cols = arr[4];
+    B.rows = arr[4];
+    B.cols = arr[4];
+    C.rows = arr[4];
+    C.cols = arr[4];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);
@@ -61,25 +68,26 @@ printf("------------------------------------------------\n");
     C = matrixSubtraction(&A,&B,world,wSize,rank);
 
     if(rank == 0){
+/*      
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Matrix B--------\n");
         printMatrix(&B);
         printf("\n--------Matrix Subtraction Total--------\n");
         printMatrix(&C);
-
+*/
         free(A.data);
         free(B.data);
         free(C.data);
-    printf("------------------------------------------------\n");
+//        printf("------------------------------------------------\n");
     }
 //multiplication 
-    A.rows = 5;
-    A.cols = 5;
-    B.rows = 5;
-    B.cols = 5;
-    C.rows = 5;
-    C.cols = 5;
+    A.rows = arr[4];
+    A.cols = arr[4];
+    B.rows = arr[4];
+    B.cols = arr[4];
+    C.rows = arr[4];
+    C.cols = arr[4];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);
@@ -89,23 +97,24 @@ printf("------------------------------------------------\n");
     C = matrixMutiplication(&A,&B,world,wSize,rank);
 
     if(rank == 0){
+/*
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Matrix B--------\n");
         printMatrix(&B);
         printf("\n--------Matrix Multiplication Total--------\n");
         printMatrix(&C);
-
+*/
         free(A.data);
         free(B.data);
         free(C.data);
-    printf("------------------------------------------------\n");
+//        printf("------------------------------------------------\n");
     }
 // inner product
-    A.rows = 5;
-    A.cols = 1;
-    B.rows = 5;
-    B.cols = 1;
+    A.rows = arr[4];
+    A.cols = arr[4];
+    B.rows = arr[4];
+    B.cols = arr[4];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);
@@ -115,20 +124,21 @@ printf("------------------------------------------------\n");
     int innerProdRes = innerProduct(&A,&B,world,wSize,rank);
 
     if(rank == 0){
+/*
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Matrix B--------\n");
         printMatrix(&B);
         printf("\n--------Inner Product Total--------\n");
         printf("%d\n",innerProdRes);
-
+*/
         free(A.data);
         free(B.data);
-    printf("------------------------------------------------\n");
+//        printf("------------------------------------------------\n");
     }
 // transpose    
-    A.rows = 5;
-    A.cols = 3;
+    A.rows = arr[4];
+    A.cols = arr[4];
 
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
@@ -137,11 +147,12 @@ printf("------------------------------------------------\n");
     C = matrixTranspose(&A);
 
     if(rank == 0){
+/*
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Transpose Matrix--------\n");
         printMatrix(&C);
-
+*/
         free(A.data);
         free(C.data);
     }

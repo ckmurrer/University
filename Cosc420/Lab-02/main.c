@@ -54,12 +54,12 @@ int main(int argc, char** argv){
 //        printf("------------------------------------------------\n");
     }
 //subtraction
-    A.rows = arr[4];
-    A.cols = arr[4];
-    B.rows = arr[4];
-    B.cols = arr[4];
-    C.rows = arr[4];
-    C.cols = arr[4];
+    A.rows = arr[3];
+    A.cols = arr[3];
+    B.rows = arr[3];
+    B.cols = arr[3];
+    C.rows = arr[3];
+    C.cols = arr[3];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);

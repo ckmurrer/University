@@ -6,7 +6,7 @@
 #include<time.h>
 #include<mpi.h>
 
-#define INDEX(A,i,j) j*A.cols+i
+#define INDEX(A,i,j) A.cols*i+j
 #define ACCESS(A,i,j) A.data[INDEX(A,i,j)]
 
 typedef struct matrix{
@@ -16,19 +16,19 @@ typedef struct matrix{
 }matrix;
 
 // initMatrix
-	void initMatrix(matrix*, int, int);
+	void initMatrix(matrix* A, int rows, int cols);
 // matrix random population
-	void populateMatrix(matrix*, int, int);
+	void populateMatrix(matrix* A, int rows, int cols);
 // multiplication
-	int* matrixMutiplication(matrix*,matrix*, MPI_Comm,int, int);
+	matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // addition
-	int* matrixAddition(matrix*,matrix*, MPI_Comm,int, int);
+	matrix matrixAddition(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // innerproduct
-   	int innerProduct(matrix*,matrix*, MPI_Comm,int, int);
+   	int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // printMatrix
-	void printMatrix(matrix*);
+	void printMatrix(matrix* A);
 // subtraction
-	int*  matrixSubtraction(matrix*,matrix*, MPI_Comm,int, int);
+	matrix  matrixSubtraction(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // transpose
-	int* matrixTranspose(matrix*);
+	matrix matrixTranspose(matrix* A);
 #endif

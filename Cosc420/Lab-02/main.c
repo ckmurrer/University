@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 // testing for add and subtract
     matrix A,B,C;
  // addition
- /*
+ /* 
     A.rows = arr[4];
     A.cols = arr[4];
     B.rows = arr[4];
@@ -40,7 +40,7 @@ int main(int argc, char** argv){
     C = matrixAddition(&A,&B,world,wSize,rank);
 
     if(rank == 0){
-/    
+    
         printf("--------Matrix A--------\n");
         printMatrix(&A);
         printf("\n--------Matrix B--------\n");
@@ -54,15 +54,15 @@ int main(int argc, char** argv){
         printf("Addition Done\n");
 //        printf("------------------------------------------------\n");
     }
-    */
-   /*
+   */ 
+  /* 
 //subtraction
-    A.rows = arr[1];
-    A.cols = arr[1];
-    B.rows = arr[1];
-    B.cols = arr[1];
-    C.rows = arr[1];
-    C.cols = arr[1];
+    A.rows = arr[0];
+    A.cols = arr[0];
+    B.rows = arr[0];
+    B.cols = arr[0];
+    C.rows = arr[0];
+    C.cols = arr[0];
     if(rank == 0){
         initMatrix(&A,A.rows,A.cols);
         initMatrix(&B,B.rows,B.cols);
@@ -79,14 +79,18 @@ int main(int argc, char** argv){
         printMatrix(&B);
         printf("\n--------Matrix Subtraction Total--------\n");
         printMatrix(&C);
-
+	
         free(A.data);
         free(B.data);
-        free(C.data);
+     //   free(C.data);
         printf("Subtraction Done\n");
 //        printf("------------------------------------------------\n");
-    }*/
-    /*
+    }
+
+	free(arr);
+	free(C.data);
+*/
+    
 //multiplication 
     A.rows = arr[4];
     A.cols = arr[4];
@@ -105,18 +109,19 @@ int main(int argc, char** argv){
     if(rank == 0){
 
         printf("--------Matrix A--------\n");
-        printMatrix(&A);
+  //      printMatrix(&A);
         printf("\n--------Matrix B--------\n");
-        printMatrix(&B);
+  //      printMatrix(&B);
         printf("\n--------Matrix Multiplication Total--------\n");
-        printMatrix(&C);
+   //     printMatrix(&C);
 
         free(A.data);
         free(B.data);
-        free(C.data);
+   //     free(C.data);
         printf("Multiplication Done\n");
 //        printf("------------------------------------------------\n");
-    }*/
+    }
+	free(C.data);
     /*
 // inner product
     A.rows = arr[4];

@@ -4,6 +4,7 @@
 	Project-01
 	Due: 10/17/2021
 */
+#define _XOPEN_SOURCE
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -11,8 +12,6 @@
 #include<math.h>
 #include<time.h>
 #include<mpi.h>
-
-#define _XOPEN_SOURCE
 
 /*	
 	TODO:
@@ -25,8 +24,6 @@
 		figure our how to possibly make save points
 */
 
-
-
 // does not exceed 4 characters
 void suffix(){
 	char* salt = "$1$ab";
@@ -38,53 +35,49 @@ void prefix(){
 
 }
 
-
-int main(int* argc, int** argv){
-	MPI_Init(&argc,&argv);
+int main(int argc, int** argv){
+	MPI_Init(NULL,NULL);
 	
 	int wSize, rank;
 	MPI_Comm world = MPI_COMM_WORLD;
 	MPI_Comm_size(world, &wSize);
 	MPI_Comm_rank(world,&rank);
-	MPI_File dicFile;
-	MPI_File hashFile;
-/*
-	int *send = NULL;
-	int lineNumber = 23588;
-*/
+
+	int dicNumber = 23588;
+	int shadNumber = 11;
+	int count = 0;
+	char word[11][100];
+	char buffer[255];
+	FILE* shadow = fopen("shadow","r");
+	int i = 0;
+// spent 5 HOURS ON THESE 4 LINES I HATE C STRINGS
+	while(fgets(buffer, 255 , shadow)){
+		strcpy(word[i],buffer);
+		printf("%s",word[i]);
+		i++;
+	}
+
+	FILE* dictionary = fopen("words.txt","r");
+	//printf("%s",word);
+	if(rank == 0){
+
+		
+	}
 
 // Ask how to read/distribute the file
 	// opens up dictionary file
-/*	if(rank == 0){
-		MPI_File_open(
-			world,
-			"words.txt",
-			MPI_MODE_RDONLY,
-			MPI_INFO_NULL,
-			&dicFile
-		);
-	}
-	// open up hash text file
-	MPI_File_open(
-		world,
-		"shadow",
-		MPI_MODE_RDONLY,
-		MPI_INFO_NULL,
-		&hashFile
-	);
-*/
+
 	char* test = "test";
 
 	int maxSize = 9999;
 	int operations = (maxSize/wSize);
 	int start = rank*operations;
-	if(rank % 2 != 0){
-		start = rank*operations+1;
-	}
 	int end = start+operations;
 
 	//printf("rank = %d\nmax = %d\noperations = %d\nstart = %d\nend = %d\n",rank,maxSize,operations,start,end);
 
+	
+	fclose(shadow);
 	MPI_Finalize();
 	return(0);
 }

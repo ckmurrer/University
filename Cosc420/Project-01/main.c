@@ -12,42 +12,51 @@
 #include<math.h>
 #include<time.h>
 #include<mpi.h>
+#include<crypt.h>
+
 
 /*	
 	TODO:
 		create the suffix from 0000-9999
-		create a hashing method that will append the suffix or prefix to the dictionary word and compare with hashed password from shadow file
 		figure out how to tell other nodes a hash has been found and not to check that one anymore 
-		figure our how to possibly make save points
+		figure out how to possibly make save points
 */
 
-int char_to_int(char* input){
-    int trans = 0; 
-    int pos = 0;
-// checks to see if there is a char in the input stream
-// that can be translated into ascii
-    while(input[pos] != '\0'){
-       trans = (10 * trans) + (input[pos]-'0');
-       pos++;
-    }
-    return trans;
-}
-// calls the above method to change the passed char to an int value
-// then changes that int value to a corresponding char then returns
-char int_to_char(char *input){
-    int number = char_to_int(input); // calls the char to int conversion method
-    char textVal = number; 
-    return textVal;
+
+
+void hashTime(char dic[], char users[255][255], char seed[255][255], char hash[255][255]){
+	int i,k;
+	char *over = malloc(500*sizeof(char));
+	char* iHopeThisWorks = crypt(dic,"$1$ab$");
+	int count = 0;
+	for(i=0;i<11;i++){
+		strcat(over,seed[i]);
+		strcat(over,hash[i]);
+		for(k=0;k<11;k++){
+			printf("%s\n",dic);
+			if(strcmp(iHopeThisWorks,over)==0){
+				printf("\n\n\n\nFOUND ONE:  %s--------------\n\n\n\n\n\n",dic);
+				count++;
+				break;
+			}
+		}
+		if(count == 1){
+			break;
+		}
+
+	}
+
+	free(over);
 }
 
 
 // does not exceed 4 characters
-void suffix(char buff []){
-	printf("%s",buff);
+void suffix(char buff [],int rank){
+
 }
 
 // does not exceed 4 characters
-char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[]){
+char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[],char users[255][255], char seed[255][255], char hash[255][255]){
 	char buffer[255];
 	int count = 0, inc = 0;
 	int stop = start*wSize;
@@ -106,14 +115,14 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				inc++;
 			}
 		}
-	
-	int i,k,pls=0,work=0,maybe = 0,boop = start, check = start;
+
+	int i,k,pls=0,work=0,maybe = 0,boop = 0, check = start;
 	for(k = start; k < end;k++){
 		for(i=0; i < 10; i++){
 			if(k<9){
 				count = 0;
 				if(count!=10&&k==start){
-					suffix(buffer);
+					hashTime(buffer,users,seed,hash);
 					buffer[0]++;
 					x++;
 					count++;
@@ -135,7 +144,7 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					buffer[1]-=10;
 				}		
 				if(count != 10){
-					suffix(buffer);
+					hashTime(buffer,users,seed,hash);
 					buffer[1]++;
 					count++;
 				}
@@ -144,7 +153,7 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					count = 0;
 				}
 			}
-			if(k>start+19 && k<start+100){
+			if(k>start+19 && k<start+100 && inc < 3){
 
 				if(x==11){
 					sprintf(buffer,"000%s",dicWord);
@@ -160,10 +169,9 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				}
 				if(count == 0 && k!=start+20){
 					buffer[2]-=10;
-					
 				}		
 				if(count != 10){
-					suffix(buffer);
+					hashTime(buffer,users,seed,hash);
 					buffer[2]++;
 					count++;
 				}
@@ -179,19 +187,26 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					
 					work = 0;
 				}
-			}/*
-			if(k>start+99 && k<start+1000){
-				if(pls==2){
+			}
+			if(k>start+99 && k<start+1000 ){
+				if(x==12){
 					sprintf(buffer,"0000%s",dicWord);
 					count = 0;
-					pls++;
+					x++;
 				}
 
+				if(maybe == 0 && x!=13){
+					buffer[3] -= arr2[0];
+					buffer[2] -= arr2[1];
+					buffer[1] -= arr2[2];
+					count = 0;
+					maybe ++;
+				}
 				if(count == 0 && k!=start+100){
 					buffer[3]-=10;
-				}	
+				}		
 				if(count != 10){
-					suffix(buffer);
+					hashTime(buffer,users,seed,hash);
 					buffer[3]++;
 					count++;
 				}
@@ -211,15 +226,13 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					buffer[1]-=10;
 					boop = 0;
 				}
-			}*/
+			}
 		}	
 	
-		if(buffer[0] == stopOp[0]){
+		if(buffer[0] == stopOp[k]){
 			break;
 		}
-		//printf("%s",stopOp);
 	}
-		
 }
 
 int main(int argc, int** argv){
@@ -233,16 +246,16 @@ int main(int argc, int** argv){
 	int dicNumber = 23588;
 	int shadNumber = 11;
 	int count = 0;
-	char id[11][100];
-	char salty[11][100];
-	char hash[11][100];
-	char users[11][100];
+	char id[255][255];
+	char salty[255][255];
+	char hash[255][255];
+	char users[255][255];
 	char buffer[255];
 	char dicBuffer[255];
-	char seed[11][100];
+	char seed[255][255];
 	char *temp;
-	char buf[11][100];
-	char words[1][100];
+	char buf[255][255];
+	char words[1][255];
 	FILE* shadow = fopen("shadow","r");
 	int i = 0;
 // spent 5 HOURS PLUS ON THIS ALONE
@@ -272,7 +285,7 @@ int main(int argc, int** argv){
 		i++;
 	}
 
-	int maxSize = 1000;
+	int maxSize = 9999;
 	int operations = (maxSize/wSize);
 	int start = rank*operations;
 	int end = start+operations;
@@ -287,13 +300,16 @@ int main(int argc, int** argv){
 	sprintf(stopPoint,"%d",t2);
 	
 	int j = 0;
-	FILE* dictionary = fopen("test.txt","r");
+	FILE* dictionary = fopen("words.txt","r");
 	while(fgets(dicBuffer,255,dictionary)){
 		strcpy(words[0],dicBuffer);
-		prefix(words[0],start,end, rank,wSize, stopPoint);
+		if(rank == 0){
+			hashTime(words[0],users,seed,hash);
+		}
+		prefix(words[0],start,end, rank,wSize, stopPoint,users,seed,hash);
 	}
 
-	printf("rank = %d\nmax = %d\noperations = %d\nstart = %d\nend = %d\ntemp = %s\n",rank,maxSize,operations,start,end,stopPoint);
+	//printf("rank = %d\nmax = %d\noperations = %d\nstart = %d\nend = %d\ntemp = %s\n",rank,maxSize,operations,start,end,stopPoint);
 
 	fclose(dictionary);
 	fclose(shadow);

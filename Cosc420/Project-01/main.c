@@ -235,7 +235,7 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[],
 	}
 }
 
-int main(int argc, int** argv){
+int main(int argc, char** argv){
 	MPI_Init(NULL,NULL);
 	
 	int wSize, rank;

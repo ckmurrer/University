@@ -76,13 +76,14 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				temp = temp/10;
 				inc++;
 			}	
-			if(start >99 && start < 1000){
+			if(start >100 && start < 1000){
 				sprintf(buffer,"000%s",dicWord);
 				if(inc == 3){
 					temp = 0;
 				}
 				temp2 = temp % 10;
-				arr[inc] = temp2;
+				arr2[inc] = temp2;
+				arr[inc] = arr2[inc];
 				buffer[0]+=arr[2];
 				buffer[1]+=arr[1];
 				buffer[2]+=arr[0];
@@ -105,6 +106,7 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				inc++;
 			}
 		}
+	
 	int i,k,pls=0,work=0,maybe = 0,boop = start, check = start;
 	for(k = start; k < end;k++){
 		for(i=0; i < 10; i++){
@@ -117,7 +119,7 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					count++;
 				}
 			}
-			if(k>start+9 && k < start+20){
+			if(k>start+9 && k < start+20 && inc<3){
 				if(x==10){
 					sprintf(buffer,"00%s",dicWord);
 					count = 0;
@@ -141,34 +143,25 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 					buffer[0]++;
 					count = 0;
 				}
-				/*if(pls==0){
-					sprintf(buffer,"00%s",dicWord);
-					count = 0;
-					pls++;
-				}
-				if(count == 0 && k!=start+10){
-					buffer[1]-=10;
-				}		
-				if(count != 10){
-					suffix(buffer);
-					buffer[1]++;
-					count++;
-				}
-				if(count == 10){
-					buffer[0]++;
-					count = 0;
-				}*/
-			}/*
+			}
 			if(k>start+19 && k<start+100){
-				if(pls==1){
+
+				if(x==11){
 					sprintf(buffer,"000%s",dicWord);
 					count = 0;
-					pls++;
+					x++;
 				}
 
+				if(maybe == 0 && x!=12){
+					buffer[2] -= arr2[1];
+					buffer[1] -= arr2[2];
+					count = 0;
+					maybe ++;
+				}
 				if(count == 0 && k!=start+20){
 					buffer[2]-=10;
-				}	
+					
+				}		
 				if(count != 10){
 					suffix(buffer);
 					buffer[2]++;
@@ -181,10 +174,12 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				}
 				if(work == 10){
 					buffer[0]++;
+		
 					buffer[1]-=10;
+					
 					work = 0;
 				}
-			}
+			}/*
 			if(k>start+99 && k<start+1000){
 				if(pls==2){
 					sprintf(buffer,"0000%s",dicWord);
@@ -218,12 +213,13 @@ char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[])
 				}
 			}*/
 		}	
+	
 		if(buffer[0] == stopOp[0]){
 			break;
 		}
 		//printf("%s",stopOp);
 	}
-	
+		
 }
 
 int main(int argc, int** argv){
@@ -276,7 +272,7 @@ int main(int argc, int** argv){
 		i++;
 	}
 
-	int maxSize = 50;
+	int maxSize = 1000;
 	int operations = (maxSize/wSize);
 	int start = rank*operations;
 	int end = start+operations;
@@ -297,7 +293,7 @@ int main(int argc, int** argv){
 		prefix(words[0],start,end, rank,wSize, stopPoint);
 	}
 
-	//printf("rank = %d\nmax = %d\noperations = %d\nstart = %d\nend = %d\ntemp = %s\n",rank,maxSize,operations,start,end,stopPoint);
+	printf("rank = %d\nmax = %d\noperations = %d\nstart = %d\nend = %d\ntemp = %s\n",rank,maxSize,operations,start,end,stopPoint);
 
 	fclose(dictionary);
 	fclose(shadow);

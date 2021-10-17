@@ -56,7 +56,7 @@ void suffix(char buff [],int rank){
 }
 
 // does not exceed 4 characters
-char prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[],char users[255][255], char seed[255][255], char hash[255][255]){
+void prefix(char dicWord[],int start, int end, int rank,int wSize,char stopOp[],char users[255][255], char seed[255][255], char hash[255][255]){
 	char buffer[255];
 	int count = 0, inc = 0;
 	int stop = start*wSize;

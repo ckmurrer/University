@@ -31,4 +31,6 @@ typedef struct matrix{
 	matrix  matrixSubtraction(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // transpose
 	matrix matrixTranspose(matrix* A);
+// gauss jordan
+	
 #endif

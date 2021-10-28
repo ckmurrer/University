@@ -13,23 +13,28 @@ int main(int argc, char** argv){
     matrix a;
     matrix b;
     matrix c;
+int check = 0;
     //if(rank == 0){
-        initMatrix(&a,100,100);
-        initMatrix(&b,100,100);
-        initMatrix(&c,100,100);
+        initMatrix(&a,2,2);
+        initMatrix(&b,2,2);
+       // initMatrix(&c,5,5);
     if(rank == 0){
-        populateMatrix(&a,100,100);
-        populateMatrix(&b,100,100);
-    }
-        c = matrixMutiplication(&a,&b,world,wSize,rank);
+        populateMatrix(&a,2,2);
+        populateMatrix(&b,2,2);
+}
+	check = innerProduct(&a,&b,world,wSize,rank);
         if(rank == 0){
-            printMatrix(&c);
-        }
-        if(rank == 0){
+	    printMatrix(&a);
+	    printf("\n");
+	    printMatrix(&b);
+	    printf("\n%d",check);
+           // printMatrix(&c);
+	}
+       // if(rank == 0){
             free(a.data);
             free(b.data);
             free(c.data);
-        }
+       // }
   //  }
     MPI_Finalize();
     return 0;

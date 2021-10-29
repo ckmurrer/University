@@ -13,7 +13,6 @@ int main(int argc, char** argv){
     matrix a;
     matrix b;
     matrix c;
-int check = 0;
     //if(rank == 0){
         initMatrix(&a,2,2);
         initMatrix(&b,2,2);
@@ -21,14 +20,14 @@ int check = 0;
     if(rank == 0){
         populateMatrix(&a,2,2);
         populateMatrix(&b,2,2);
-}
-	check = innerProduct(&a,&b,world,wSize,rank);
+    }
+    c = matrixMutiplication(&a,&b,world,wSize,rank);
         if(rank == 0){
 	    printMatrix(&a);
 	    printf("\n");
 	    printMatrix(&b);
-	    printf("\n%d",check);
-           // printMatrix(&c);
+	    printf("\n");
+            printMatrix(&c);
 	}
        // if(rank == 0){
             free(a.data);

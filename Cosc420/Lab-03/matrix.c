@@ -179,14 +179,14 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
 }
 // gives almost proper output only works with NxN matrix idk how to fix
 matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
-    matrix /*matTrans,*/vecOne,vecTwo,test; // transpose matrix horizontal and vertical vectors
+    matrix/* matTrans,*/vecOne,vecTwo,test; // transpose matrix horizontal and vertical vectors
     
     if(A->cols!=B->rows){
         printf("This aint it cheif. Invalid input. Rank: %d\n",rank);
         return test;
     }
 
-    //matTrans = matrixTranspose(B); // takes the transpose of a passed matrix
+   // matTrans = matrixTranspose(B); // takes the transpose of a passed matrix
     initMatrix(&vecOne,1,A->cols); // initializes a vector
     initMatrix(&vecTwo,B->rows,1); // initializes a vector
     if(rank == 0){
@@ -196,7 +196,7 @@ matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int ra
   //  int* multTotal = malloc(size*sizeof(int));
     // compile with -std=c99
     for(int i=0; i<A->rows; i++){
-        for(int j=0; j<B->cols; j++){
+        for(int j=0; j<B->rows; j++){
             if(rank == 0){
                 for(int k=0; k<A->cols; k++){
                 // vecTwo.data[k] = matTrans.data[j*A->cols+k]; // sets the vector equal to the data of the transpose matrix

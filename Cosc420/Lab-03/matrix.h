@@ -32,5 +32,7 @@ typedef struct matrix{
 // transpose
 	matrix matrixTranspose(matrix* A);
 // gauss jordan
-	
+	matrix gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank);
+// copy matrix
+	void copyMatrix(matrix* A, matrix* B);
 #endif

@@ -24,6 +24,22 @@ void printMatrix(matrix* A){
         printf("\n");
     }
 }
+
+void copyMatrix(matrix* A, matrix* B){
+    A->rows = B->rows;
+    A->cols = B->cols;
+    int size = B->rows*B->cols;
+    if(B->data){
+        A->data = malloc(size*sizeof(int));
+        int i;
+        for(int i=0; i<size; i++){
+            A->data[i] = B->data[i];
+        }
+    }else{
+        printf("Original matrix is empty\n");
+    }
+}
+
 // idk how to fix mem leak
 matrix matrixAddition(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
 // error checking to see if the matrix is nxn    
@@ -179,44 +195,38 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
 }
 // gives almost proper output only works with NxN matrix idk how to fix
 matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
-    matrix/* matTrans,*/vecOne,vecTwo,test; // transpose matrix horizontal and vertical vectors
+    matrix matTrans,vecOne,vecTwo,test; // transpose matrix horizontal and vertical vectors
     
     if(A->cols!=B->rows){
         printf("This aint it cheif. Invalid input. Rank: %d\n",rank);
         return test;
     }
 
-   // matTrans = matrixTranspose(B); // takes the transpose of a passed matrix
+    matTrans = matrixTranspose(B); // takes the transpose of a passed matrix
     initMatrix(&vecOne,1,A->cols); // initializes a vector
     initMatrix(&vecTwo,B->rows,1); // initializes a vector
     if(rank == 0){
         initMatrix(&test,A->rows,A->cols);
     }
-  //  int size = A->rows*matTrans.rows; 
-  //  int* multTotal = malloc(size*sizeof(int));
+    int size = A->rows*matTrans.rows; 
+    //int* multTotal = malloc(size*sizeof(int));
     // compile with -std=c99
     for(int i=0; i<A->rows; i++){
-        for(int j=0; j<B->rows; j++){
+        for(int j=0; j<matTrans.rows; j++){
+            for(int k=0; k< A->cols; k++){
+                vecTwo.data[k] = matTrans.data[j*A->cols+k];
+                vecOne.data[k] = ACCESS((*A),i,k);
+            }
+            test.data[INDEX((*B),i,j)] = innerProduct(&vecOne,&vecTwo,world,wSize,rank);
+        //  multTotal[INDEX((*B),i,j)] = innerProduct(&vecOne,&vecTwo,world,wSize,rank); // gets the inner produc of the to vectors
             if(rank == 0){
-                for(int k=0; k<A->cols; k++){
-                // vecTwo.data[k] = matTrans.data[j*A->cols+k]; // sets the vector equal to the data of the transpose matrix
-                // vecOne.data[k] = ACCESS((*A),i,k); //sets the vector equal to A.data[A.cols*i+j]
-                    vecOne.data[k] = ACCESS((*A),i,j);
-                }
-                for(int k=0; k<B->rows; k++){
-                    vecTwo.data[k] = ACCESS((*B),k,j);
-                }
-            }   
-            int temp = innerProduct(&vecOne,&vecTwo,world,wSize,rank);
-        //    multTotal[INDEX((*B),i,j)] = innerProduct(&vecOne,&vecTwo,world,wSize,rank); // gets the inner produc of the to vectors
-            if(rank == 0){
-                test.data[INDEX((*B),i,j)] = temp;
+                //test.data[INDEX((*B),i,j)] = temp;
             }
         }
     }
     //test.data = multTotal;
-  //free(multTotal); // gives invalid free() possible cause of mem leak? pls im dying why does it giv mem errors when uncommented
-    //free(matTrans.data);
+    //free(multTotal); // gives invalid free() possible cause of mem leak? pls im dying why does it giv mem errors when uncommented
+    free(matTrans.data);
     free(vecTwo.data);
     free(vecOne.data);
     return test;
@@ -303,4 +313,19 @@ matrix matrixTranspose(matrix* A){
         }
     }
     return tPose;
+}
+
+matrix gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
+    matrix tempMatOne,tempMatTwo, retMatrix;
+    matrix* copyA, *copyB;
+    copyA=&tempMatOne;
+    copyB=&tempMatTwo;
+
+    copyMatrix(copyA,A);
+    copyMatrix(copyB,B);
+
+    
+
+
+    return retMatrix;
 }

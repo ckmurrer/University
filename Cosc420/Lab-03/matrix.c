@@ -315,17 +315,195 @@ matrix matrixTranspose(matrix* A){
     return tPose;
 }
 
-matrix gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
-    matrix tempMatOne,tempMatTwo, retMatrix;
+int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
+    matrix tempMatOne,tempMatTwo;
     matrix* copyA, *copyB;
+    // checks if the rows are the same if not return an empty matrix
+    if(A->rows != B->rows){
+        printf("Invalid matrix size\n");
+        return NULL;
+    }
+
+    initMatrix(&tempMatOne, A->rows, A->cols);
+    initMatrix(&tempMatTwo, B->rows, B->cols);
     copyA=&tempMatOne;
     copyB=&tempMatTwo;
-
     copyMatrix(copyA,A);
     copyMatrix(copyB,B);
 
-    
+    int scatterA[wSize], displaceA[wSize];
+    int i;
+    int plsWork = (copyA->rows%wSize);
+    // setting up to scatter matrix A
+    for(i = 0; i< wSize; i++){
+        scatterA[i] = (copyA->rows/wSize)*copyA->cols;
+    }
+    for(i = 0; i<plsWork; i++){
+        scatterA[i] += copyA->cols;
+    }
+    // setup displacement for A
+    for(i = 0; i<wSize; i++){
+      if(i == 0){
+          displaceA[i] = 0;
+      }else{
+          displaceA[i] += scatterA[i-1];
+      }
+    }
 
+    int scatterB[wSize], displaceB[wSize];
+    int j;
+    int workPls = (copyB->rows%wSize);
+    // setting up to scatter matrix B
+    for(j = 0; j<wSize; j++){
+        scatterB[j] = (copyB->rows/wSize)*copyB->cols;
+    } 
+    for(j = 0; j<workPls; j++){
+        scatterB[j] += copyB->cols;
+    }
+    // setup displacement for B
+    for(j = 0; j<wSize; j++){
+      if(j == 0){
+          displaceB[j] = 0;
+         
+      }else{
+          displaceB[j] += scatterB[j-1];
+      }
+    }
 
-    return retMatrix;
+    int* matAScatter = malloc(scatterA[rank]* sizeof(int));
+    int* matBScatter = malloc(scatterB[rank] * sizeof(int));
+    int aPivot[copyA->rows],bPivot[copyB->rows], scale[copyA->rows];
+    int k,l,z;
+    for(k = 0; k<copyA->rows; k++){
+        if(rank == 0){
+            for(l = 0; l< copyA->rows; l++){
+                scale[l] = ACCESS((*copyA),l,k)/ACCESS((*copyA),k,k); 
+            }
+            for(l = 0; l< copyA->cols; l++){
+                aPivot[l] = ACCESS((*copyA),k,l);
+            }
+            for(l = 0; l< copyB->cols; l++){
+                bPivot[l] = ACCESS((*copyB),k,l);
+            }
+        }
+
+        MPI_Scatterv(
+            copyA->data,
+            scatterA,
+            displaceA,
+            MPI_INT,
+            aPivot,
+            scatterA[rank],
+            MPI_INT,
+            0,
+            world
+        );
+
+        MPI_Scatterv(
+            copyB->data,
+            scatterB,
+            displaceB,
+            MPI_INT,
+            bPivot,
+            scatterB[rank],
+            MPI_INT,
+            0,
+            world
+        );
+
+        MPI_Bcast(
+            &scale,
+            copyA->rows,
+            MPI_INT,
+            0,
+            world
+        );
+
+        MPI_Bcast(
+            &aPivot,
+            copyA->rows,
+            MPI_INT,
+            0,
+            world
+        );
+
+        MPI_Bcast(
+            &bPivot,
+            copyB->rows,
+            MPI_INT,
+            0,
+            world
+        );
+
+        for(z = 0; z<scatterA[rank]/copyA->cols; z++){
+            if(k == z+(displaceA[rank]/copyA->cols)){
+                continue;
+            }
+            for(l = 0; l<copyA->cols; l++){
+                matAScatter[INDEX((*copyA),z,l)] = matAScatter[INDEX((*copyA),z,l)] - (scale[z+(displaceA[rank]/copyA->cols)]*aPivot[l]);
+            }
+            for(l = 0; l<copyB->cols; l++){
+                 matBScatter[INDEX((*copyB),z,l)] = matBScatter[INDEX((*copyB),z,l)] - (scale[z+(displaceA[rank]/copyA->cols)]*aPivot[l]);
+            }
+        }
+     
+        MPI_Gatherv(
+            matAScatter,
+            scatterA[rank],
+            MPI_INT,
+            copyA->data,
+            scatterA,
+            displaceA,
+            MPI_INT,
+            0,
+            world            
+        );
+        MPI_Gatherv(
+            matBScatter,
+            scatterB[rank],
+            MPI_INT,
+            copyB->data,
+            scatterB,
+            displaceB,
+            MPI_INT,
+            0,
+            world
+        );
+     //   free(matBScatter);
+      //  free(matAScatter);
+    }
+    if(rank == 0){
+        int diagScale[copyA->cols];
+        for(z = 0; z< copyA->rows; z++){
+            for(l = 0; l< copyA->cols; l++){
+                if(z == l){
+                    diagScale[z] = ACCESS((*copyA), z,l);
+                }
+            }
+        }
+        for(z = 0; z< copyA->rows; z++){
+            for(l = 0; l< copyA->cols; l++){
+                ACCESS((*copyA), z,l) = ACCESS((*copyA), z,l) / diagScale[z];
+            }
+        }
+        if(copyB->cols>1){
+            for(z = 0; z< copyA->rows; z++){
+                for(l = 0; l< copyA->cols; l++){
+                    ACCESS((*copyB), z,l) = ACCESS((*copyB), z,l) / diagScale[z];
+                }
+            }
+        }else{
+            for(z = 0; z< copyB->rows; z++){
+                ACCESS((*copyB), z,0) = ACCESS((*copyB), z,0) / diagScale[z];
+            }
+        }
+       // free(scatterB);
+     //   free(scatterA);
+     //   free(displaceB);
+     //   free(displaceA);
+    }
+
+   // free(tempMatTwo.data);
+   // free(tempMatOne.data);
+    return copyB->data;
 }

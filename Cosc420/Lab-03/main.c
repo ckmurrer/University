@@ -21,8 +21,8 @@ int main(int argc, char** argv){
         populateMatrix(&a,5,5);
         populateMatrix(&b,5,5);
     }
-	//c = matrixMutiplication(&a,&b,world,wSize,rank);
-    c.data = gaussJordan(&a,&b,world,wSize,rank);
+	c = matrixMutiplication(&a,&b,world,wSize,rank);
+    //c.data = gaussJordan(&a,&b,world,wSize,rank);
     //check = innerProduct(&a,&b,world,wSize,rank);
     if(rank == 0){
 	    printMatrix(&a);

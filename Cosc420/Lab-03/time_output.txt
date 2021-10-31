@@ -8,10 +8,11 @@ Subtraction     10         2.608s
                 10         2.596s
                 10         2.547s
 avg                        2.584s 
-
-Multiplication              
-
-avg    
+            
+Multiplication  10         2.515s
+                10         2.459s
+                10         2.621s
+avg                        2.531s
 
 Gaus Jordan Cant get it to run if matrix is not within the perfect scenario
 

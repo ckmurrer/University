@@ -16,4 +16,4 @@ filewriter.o: filewriter.c
 	mpicc -c filewriter.c -g -std=c99
 
 clean:
-	rm main main.o matrix.o filewriter
+	rm main main.o matrix.o filewriter filewriter.o

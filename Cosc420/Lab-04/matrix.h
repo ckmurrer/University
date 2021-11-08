@@ -29,7 +29,7 @@ typedef struct matrix{
 // printMatrix
 	void printMatrix(matrix* A);
 // subtraction
-	matrix  matrixSubtraction(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
+	double*  matrixSubtraction(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // transpose
 	matrix matrixTranspose(matrix* A);
 // gauss jordan

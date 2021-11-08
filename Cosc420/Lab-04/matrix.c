@@ -3,7 +3,7 @@
 void initMatrix(matrix* A, int rows, int cols){
 	A->rows = rows;
     A->cols = cols;
-    A->data = malloc(A->rows*A->cols*sizeof(int));
+    A->data = malloc(A->rows*A->cols*sizeof(double));
 }
 // populates the matrix
 void populateMatrix(matrix* A, int rows, int cols){
@@ -118,11 +118,11 @@ matrix matrixAddition(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank)
 	return addTotal;
 }
 // idk how to fix mem leak
-matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
+double* matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
     matrix subTotal;
     if(A->cols!=B->cols){
        printf("Why are we here? Just to suffer?\nInvalid matrix dimensions btw.\n");
-       return subTotal;
+       return subTotal.data;
     }
     initMatrix(&subTotal,A->rows,A->cols);
     double* temp;
@@ -191,7 +191,7 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
     free(displace);
     free(recBufA);
     free(recBufB);    
-	return subTotal;
+	return subTotal.data;
 }
 // gives almost proper output only works with NxN matrix idk how to fix
 matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
@@ -575,8 +575,33 @@ double normalize(matrix* A, MPI_Comm world, int wSize, int rank){
 double* eigenVector(char* fileName, MPI_Comm world, int dimensions, int wSize, int rank){
     MPI_File file;
     matrix* A;
-   // matrix temp;
+    matrix temp,temp2;
     initMatrix(A,dimensions,dimensions);
+    int size = temp.cols*temp.rows;
+    int i;
+    int counter = 0;
+    int finished = 0;
+    int sendCount[wSize];
+    int displacement[wSize];
+    int total;
+    double* diff;
+    double buff[size];
+    double buff2[size];
+    double norm;
+    double tolerance = pow(10,-16);
+    if(rank == 0){
+        for(i=0; i<size; i++){
+            buff[i] = 1;
+            buff2[i] = 1;
+        }
+    }
+    temp.rows = A->rows;
+    temp.cols = 1;
+    temp2.cols = 1;
+    temp2.rows = A->rows;
+    temp.data = buff;
+    temp2.data = buff2;
+    
     MPI_File_open(
         world,
         fileName,
@@ -596,8 +621,89 @@ double* eigenVector(char* fileName, MPI_Comm world, int dimensions, int wSize, i
     }
     MPI_File_close(&file);
     MPI_Barrier(world);
-
     
+    while(counter<1 && !finished ){
+        free(temp2.data);
+        temp2.data = temp.data;
+        temp = matrixMutiplication(A,&temp,world,wSize,rank);
+        norm = normalize(&temp,world,wSize,rank);
+
+        MPI_Bcast(
+            &norm,
+            1,
+            MPI_DOUBLE,
+            0,
+            world
+        );
+    
+        for(i=0; i<wSize; i++){
+            sendCount[i] = (size)/wSize;
+        }
+        for(i=0; i<size%wSize; i++){
+            sendCount[i] += 1;
+        }
+        for(i=0; i<wSize; i++){
+            displacement[i] = total;
+            total += sendCount[i];
+        }
+
+        double buff3[sendCount[rank]];
+        MPI_Scatterv(
+            temp.data,
+            sendCount,
+            displacement,
+            MPI_DOUBLE,
+            buff3,
+            sendCount[rank],
+            MPI_DOUBLE,
+            0,
+            world
+        );
+
+        for(i=0; i<sendCount[rank]; i++){
+            buff3[i] /= norm;
+        }
+
+        MPI_Gatherv(
+            buff3,
+            sendCount[rank],
+            MPI_DOUBLE,
+            temp.data,
+            sendCount,
+            displacement,
+            MPI_DOUBLE,
+            0,
+            world
+        );
+
+        diff = matrixSubtraction(&temp, &temp2, world, wSize,rank);
+        if(rank == 0){
+            for(i=0; i<size; i++){
+                if(diff[i]<=tolerance){
+                    finished = 1;
+                    break;
+                }
+            }
+        }
+        if(rank==0){
+            free(diff);
+        }
+        MPI_Bcast(
+            &finished,
+            1,
+            MPI_DOUBLE,
+            0,
+            world
+        );
+        counter++;
+    }   
+    free(A->data);
+    free(temp2.data);
+    
+    if(rank == 0){
+        return temp.data;
+    }
+    return NULL;
 }
 
 // find the eigenvectors of a matrix using files
@@ -606,5 +712,114 @@ double* eigenVectorFile(char* fileName, MPI_Comm world, int dimensions, int wSiz
     matrix A;
     initMatrix(&A,dimensions,dimensions);
 
+    int sendCounter[wSize];
+    int displacement[wSize];
+    int i;
+    int temo = 0;
+    int counter = 0;
+    int finish = 0; 
+    int size = dimensions*dimensions;
 
+    double localBuff[sendCounter[rank]];
+
+    for(i=0; i< wSize; i++){
+        sendCounter[i] = size/wSize;
+        displacement[i] = temo;
+        temo+=size/wSize;
+    }
+    if(size%wSize>0){
+        sendCounter[wSize-1]+=size%wSize;
+    }
+
+    MPI_Offset offset = rank*sizeof(double)*sendCounter[rank];
+    MPI_File_open(
+        world,
+        fileName,
+        MPI_MODE_RDONLY,
+        MPI_INFO_NULL,
+        &file
+    );
+
+    MPI_File_read_at(
+        file,
+        offset,
+        localBuff,
+        sendCounter[rank],
+        MPI_DOUBLE,
+        MPI_STATUS_IGNORE
+    );
+
+    MPI_File_close(&file);
+    MPI_Gatherv(
+        localBuff,
+        sendCounter[rank],
+        MPI_DOUBLE,
+        A.data,
+        sendCounter,
+        displacement,
+        MPI_DOUBLE,
+        0,
+        world
+    );
+
+    free(sendCounter);
+    free(displacement);
+    free(localBuff);
+    MPI_Barrier(world);
+
+    matrix B;
+    B.data = malloc(dimensions*sizeof(double));
+    B.rows = dimensions;
+    B.cols = 1;
+
+    for(i=0; i<dimensions; i++){
+        B.data[i] = 1;
+    }
+
+    double toleramce = pow(10,-16);
+    while(counter<1 && !finish){
+        matrix plsWork;
+        plsWork.rows = B.rows;
+        plsWork.cols = B.cols;
+        plsWork.data = B.data;
+
+        B = matrixMutiplication(&A, &B, world, wSize, rank);
+        double norm = normalize(&B,world,wSize,rank);
+        B.data = &norm;
+        MPI_Bcast(
+            B.data,
+            dimensions,
+            MPI_DOUBLE,
+            0,
+            world
+        );
+        
+        double whyDontYouWork[dimensions];
+        int total = 0;
+        int total2 = 0;
+
+        for(i=0; i<dimensions; i++){
+            whyDontYouWork[i] = plsWork.data - B.data;
+        }
+
+        MPI_Bcast(
+            whyDontYouWork,
+            dimensions,
+            MPI_DOUBLE,
+            0,
+            world
+        );
+
+        for(i=0; i<dimensions; i++){
+            total += whyDontYouWork[i];
+            total2 += plsWork.data[i];
+        }
+
+        if(total2-total<=toleramce||total2 - total >= pow(-10,-16)){
+            finish = 1;
+        }
+        free(plsWork.data);
+        counter++;
+    }
+    return B.data;
 }

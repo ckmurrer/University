@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<mpi.h>
+#include<math.h>
 
 #define INDEX(A,i,j) A.cols*i+j
 #define ACCESS(A,i,j) A.data[INDEX(A,i,j)]
@@ -12,7 +13,7 @@
 typedef struct matrix{
     int rows;
     int cols;
-    int* data;
+    double* data;
 }matrix;
 
 // initMatrix
@@ -24,7 +25,7 @@ typedef struct matrix{
 // addition
 	matrix matrixAddition(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // innerproduct
-   	int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
+   	double innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank);
 // printMatrix
 	void printMatrix(matrix* A);
 // subtraction
@@ -32,7 +33,13 @@ typedef struct matrix{
 // transpose
 	matrix matrixTranspose(matrix* A);
 // gauss jordan
-	int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank);
+	double* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank);
 // copy matrix
 	void copyMatrix(matrix* A, matrix* B);
+// normalization
+	double normalize(matrix* A, MPI_Comm world, int wSize, int rank);
+// eigen vector
+	double* eigenVector(char* fileName, MPI_Comm world, int dimensions, int wSize, int rank);
+// eigen vector file
+	double* eigenVectorFile(char* fileName, MPI_Comm world, int dimensions, int wSize, int rank);
 #endif

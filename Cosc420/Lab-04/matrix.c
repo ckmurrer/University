@@ -19,7 +19,7 @@ void printMatrix(matrix* A){
     int i,j;
     for(i=0; i<A->rows;i++){
         for(j=0; j<A->cols;j++){
-           printf("%.03d | ",ACCESS((*A),i,j));
+           printf("%.03f | ",ACCESS((*A),i,j));
         }
         printf("\n");
     }
@@ -68,17 +68,17 @@ matrix matrixAddition(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank)
         displace[i] = displace[i-1] + sendCount[i-1]; // displacement to keep track of the sent nodes
     }
 
-    int* recBufA = malloc(sendCount[rank]*sizeof(int));
-    int* recBufB = malloc(sendCount[rank]*sizeof(int));
+    double* recBufA = malloc(sendCount[rank]*sizeof(int));
+    double* recBufB = malloc(sendCount[rank]*sizeof(int));
 
     MPI_Scatterv(
         A->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacement
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufA,            //recieve buffer
         sendCount[rank],    //recieve counter
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
@@ -86,26 +86,26 @@ matrix matrixAddition(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank)
         B->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacment
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufB,            //recieve buffer
         sendCount[rank],    //recieve counter 
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
 
-    int* temp = malloc(matSize*sizeof(int));
+    double* temp = malloc(matSize*sizeof(int));
     for(i=0; i<minSend; i++){
         temp[i] = recBufA[i]+recBufB[i]; // temp variable buffer to store added variables
     }
     MPI_Gatherv(
         temp,               //send buffer
         minSend,            //send count
-        MPI_INT,            //send type
+        MPI_DOUBLE,            //send type
         addTotal.data,           //recieve buffer
         sendCount,          //recieve count
         displace,           //recieve type
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         0,                  //root
         world               //comm
     );
@@ -125,7 +125,7 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
        return subTotal;
     }
     initMatrix(&subTotal,A->rows,A->cols);
-    int* temp;
+    double* temp;
     int matSize = A->rows*A->cols;
     int* sendCount = malloc(wSize*sizeof(int));
     int* displace = malloc(wSize*sizeof(int));
@@ -145,17 +145,17 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
         displace[i] = displace[i-1] + sendCount[i-1];
     }
 
-    int* recBufA = malloc(sendCount[rank]*sizeof(int));
-    int* recBufB = malloc(sendCount[rank]*sizeof(int));
+    double* recBufA = malloc(sendCount[rank]*sizeof(int));
+    double* recBufB = malloc(sendCount[rank]*sizeof(int));
 
        MPI_Scatterv(
         A->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacement
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufA,            //recieve buffer
         sendCount[rank],    //recieve counter
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
@@ -163,10 +163,10 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
         B->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacment
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufB,            //recieve buffer
         sendCount[rank],    //recieve counter 
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
@@ -177,11 +177,11 @@ matrix matrixSubtraction(matrix* A, matrix* B, MPI_Comm world, int wSize, int ra
        MPI_Gatherv(
         temp,               //send buffer
         minSend,            //send count
-        MPI_INT,            //send type
+        MPI_DOUBLE,            //send type
         subTotal.data,           //recieve buffer
         sendCount,          //recieve count
         displace,           //recieve type
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         0,                  //root
         world               //comm
     );
@@ -232,14 +232,14 @@ matrix matrixMutiplication(matrix* A,matrix* B, MPI_Comm world,int wSize, int ra
     return test;
 }
 // probably has memory leaks
-int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
-    int inProd = 0;
-    int temp = 0;
+double innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
+    double inProd = 0.0;
+    double temp = 0.0;
     int matSize = A->rows*A->cols;
     int* sendCount = malloc(wSize*sizeof(int));
     int* displace = malloc(wSize*sizeof(int));
-    int* recBufA = malloc(matSize*sizeof(int));
-    int* recBufB = malloc(matSize*sizeof(int));
+    double* recBufA = malloc(matSize*sizeof(double));
+    double* recBufB = malloc(matSize*sizeof(double));
     int minSend = matSize/wSize;
 // from class notes
     int i;
@@ -260,10 +260,10 @@ int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
         A->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacement
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufA,            //recieve buffer
         sendCount[rank],    //recieve counter
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
@@ -271,10 +271,10 @@ int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
         B->data,            //send buffer
         sendCount,          //send counter
         displace,           //displacment
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         recBufB,            //recieve buffer
         sendCount[rank],    //recieve counter 
-        MPI_INT,            //recieve datatype
+        MPI_DOUBLE,            //recieve datatype
         0,                  //root
         world               //comm
     );
@@ -287,7 +287,7 @@ int innerProduct(matrix* A,matrix* B, MPI_Comm world,int wSize, int rank){
         &temp,              //send Buffer
         &inProd,            //recieve buffer 
         1,                  //count
-        MPI_INT,            //datatype
+        MPI_DOUBLE,            //datatype
         MPI_SUM,            //opperation
         0,                  //root
         world               //comm
@@ -315,7 +315,7 @@ matrix matrixTranspose(matrix* A){
     return tPose;
 }
 
-int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
+double* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
     matrix tempMatOne,tempMatTwo;
     matrix* copyA, *copyB;
     // checks if the rows are the same if not return an empty matrix
@@ -391,10 +391,10 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
             copyA->data,
             scatterA,
             displaceA,
-            MPI_INT,
+            MPI_DOUBLE,
             aPivot,
             scatterA[rank],
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -403,10 +403,10 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
             copyB->data,
             scatterB,
             displaceB,
-            MPI_INT,
+            MPI_DOUBLE,
             bPivot,
             scatterB[rank],
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -414,7 +414,7 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
         MPI_Bcast(
             &scale,
             copyA->rows,
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -422,7 +422,7 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
         MPI_Bcast(
             &aPivot,
             copyA->rows,
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -430,7 +430,7 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
         MPI_Bcast(
             &bPivot,
             copyB->rows,
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -450,22 +450,22 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
         MPI_Gatherv(
             matAScatter,
             scatterA[rank],
-            MPI_INT,
+            MPI_DOUBLE,
             copyA->data,
             scatterA,
             displaceA,
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world            
         );
         MPI_Gatherv(
             matBScatter,
             scatterB[rank],
-            MPI_INT,
+            MPI_DOUBLE,
             copyB->data,
             scatterB,
             displaceB,
-            MPI_INT,
+            MPI_DOUBLE,
             0,
             world
         );
@@ -506,4 +506,105 @@ int* gaussJordan(matrix* A, matrix* B, MPI_Comm world, int wSize, int rank){
    // free(tempMatTwo.data);
    // free(tempMatOne.data);
     return copyB->data;
+}
+
+// normalize the matrix passed from main
+double normalize(matrix* A, MPI_Comm world, int wSize, int rank){
+    if(A->rows > 1 && A->cols != 1){
+        printf("Invalid size not a vector\n");
+        return 0;
+    }
+    if(A->cols > 1 && A->rows != 1){
+        printf("Invalid size not a vector\n");
+        return 0;
+    }
+
+    if(A->rows == 1){
+        matrix temp;
+        temp = matrixTranspose(A);
+        A->data = temp.data;
+    }
+    int mult = A->cols*A->rows;
+    int total = 0;
+    double globalTotal = 0.0, localTotal = 0.0;
+    int displacement[wSize];
+    int sendCount[wSize];
+    int i;
+    for(i=0; i<wSize; i++){
+        sendCount[i] = mult/wSize;
+    }   
+    for(i=0; i<mult%wSize; i++){
+        sendCount[i] += 1;
+    }
+    int buff[sendCount[rank]];
+    for(i=0; i<wSize; i++){
+        displacement[i] = total;
+        total += sendCount[i];
+    }
+
+    MPI_Scatterv(
+        A->data,
+        sendCount,
+        displacement,
+        MPI_DOUBLE,
+        buff,
+        sendCount[rank],
+        MPI_DOUBLE,
+        0,
+        world
+    );
+
+    for(i=0; i<sendCount[rank]; i++){
+        localTotal += pow(buff[i],2);
+    }
+
+    MPI_Reduce(
+        &localTotal,
+        &globalTotal,
+        1,
+        MPI_DOUBLE,
+        MPI_SUM,
+        0,
+        world
+    );
+
+    return sqrt(globalTotal);
+}
+
+// find the eigenvectors of a matrix using mpi functions
+double* eigenVector(char* fileName, MPI_Comm world, int dimensions, int wSize, int rank){
+    MPI_File file;
+    matrix* A;
+   // matrix temp;
+    initMatrix(A,dimensions,dimensions);
+    MPI_File_open(
+        world,
+        fileName,
+        MPI_MODE_RDONLY,
+        MPI_INFO_NULL,
+        &file
+    );
+
+    if(rank = 0){
+        MPI_File_read(
+            file,
+            A->data,
+            dimensions*dimensions,
+            MPI_DOUBLE,
+            MPI_STATUS_IGNORE
+        );
+    }
+    MPI_File_close(&file);
+    MPI_Barrier(world);
+
+    
+}
+
+// find the eigenvectors of a matrix using files
+double* eigenVectorFile(char* fileName, MPI_Comm world, int dimensions, int wSize, int rank){
+    MPI_File file;
+    matrix A;
+    initMatrix(&A,dimensions,dimensions);
+
+
 }

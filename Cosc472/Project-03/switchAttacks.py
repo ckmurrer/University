@@ -119,7 +119,9 @@ def DNSSPOOFMAIN():
 
 
 def main():
-   print("main")
+    MACFLOOD()
+    ARPSPOOFMAIN()
+    DNSSPOOFMAIN()
 
 if __name__ == "__main__":
     main()
